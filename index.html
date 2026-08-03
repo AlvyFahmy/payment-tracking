@@ -43,37 +43,21 @@
         * { box-sizing: border-box; }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-body);
-            color: var(--text-primary);
-            margin: 0;
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
+            background: var(--bg-body); color: var(--text-primary);
+            margin: 0; min-height: 100vh; -webkit-font-smoothing: antialiased;
         }
 
-        /* === TOPBAR === */
         .topbar {
-            background: var(--bg-sidebar);
-            height: 56px;
-            display: flex;
-            align-items: center;
-            padding: 0 28px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            background: var(--bg-sidebar); height: 56px;
+            display: flex; align-items: center; padding: 0 28px;
+            position: sticky; top: 0; z-index: 1000;
             box-shadow: 0 2px 12px rgba(0,0,0,0.15);
         }
-        .topbar-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: #fff;
-            text-decoration: none;
-        }
+        .topbar-brand { display: flex; align-items: center; gap: 12px; color: #fff; text-decoration: none; }
         .topbar-brand .brand-icon {
             width: 34px; height: 34px;
             background: linear-gradient(135deg, #3b82f6, #06b6d4);
-            border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
+            border-radius: 8px; display: flex; align-items: center; justify-content: center;
             font-size: 15px; font-weight: 700; color: #fff; flex-shrink: 0;
         }
         .topbar-brand .brand-text { font-weight: 700; font-size: 15px; letter-spacing: -0.3px; white-space: nowrap; }
@@ -93,7 +77,6 @@
             color: #fff; font-size: 12px; font-weight: 600;
         }
 
-        /* === BREADCRUMB === */
         .breadcrumb-bar {
             background: var(--bg-card); border-bottom: 1px solid var(--border-light);
             padding: 12px 28px; display: flex; align-items: center; gap: 8px; font-size: 12.5px;
@@ -102,24 +85,18 @@
         .breadcrumb-bar a:hover { color: var(--accent); }
         .breadcrumb-bar .sep { color: var(--text-muted); }
         .breadcrumb-bar .current { color: var(--text-primary); font-weight: 600; }
-        .breadcrumb-bar .page-title-inline {
-            margin-left: auto; font-weight: 600; font-size: 13px; color: var(--text-primary);
-        }
+        .breadcrumb-bar .page-title-inline { margin-left: auto; font-weight: 600; font-size: 13px; color: var(--text-primary); }
 
-        /* === MAIN === */
-        .main-content { padding: 28px; max-width: 1360px; margin: 0 auto; }
+        .main-content { padding: 28px; max-width: 1480px; margin: 0 auto; }
 
-        /* === PAGE HEADER === */
         .page-header { margin-bottom: 24px; }
         .page-header h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; margin: 0 0 6px; }
         .page-header p { color: var(--text-secondary); font-size: 13.5px; margin: 0; line-height: 1.5; }
 
-        /* === STAT CARDS === */
+        /* Stat Cards */
         .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
-            gap: 14px;
-            margin-bottom: 24px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+            gap: 14px; margin-bottom: 24px;
         }
         .stat-card {
             background: var(--bg-card); border: 1px solid var(--border-light);
@@ -133,10 +110,6 @@
         .stat-card.sc-total::before { background: var(--accent); }
         .stat-card.sc-paid::before { background: var(--success); }
         .stat-card.sc-unpaid::before { background: var(--danger); }
-        .stat-card.sc-ptp::before { background: var(--warning); }
-        .stat-card.sc-broken::before { background: #e11d48; }
-        .stat-card.sc-totalpaid::before { background: #059669; }
-        .stat-card.sc-totaloutstanding::before { background: #dc2626; }
         .stat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
         .stat-card .sc-icon {
             width: 36px; height: 36px; border-radius: 9px;
@@ -146,10 +119,6 @@
         .sc-total .sc-icon { background: var(--accent-light); color: var(--accent); }
         .sc-paid .sc-icon { background: var(--success-bg); color: var(--success); }
         .sc-unpaid .sc-icon { background: var(--danger-bg); color: var(--danger); }
-        .sc-ptp .sc-icon { background: var(--warning-bg); color: var(--warning); }
-        .sc-broken .sc-icon { background: rgba(225,29,72,0.08); color: #e11d48; }
-        .sc-totalpaid .sc-icon { background: rgba(5,150,105,0.1); color: #059669; }
-        .sc-totaloutstanding .sc-icon { background: rgba(220,38,38,0.08); color: #dc2626; }
         .stat-card .sc-label {
             font-size: 11px; font-weight: 600; color: var(--text-muted);
             text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;
@@ -158,7 +127,6 @@
             font-size: 22px; font-weight: 800; letter-spacing: -0.5px;
             line-height: 1.1; font-family: 'JetBrains Mono', monospace;
         }
-        .stat-card .sc-value.val-rp { font-size: 16px; }
         .stat-card .sc-sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
         .progress-mini {
             height: 4px; background: var(--border-light); border-radius: 2px;
@@ -166,40 +134,38 @@
         }
         .progress-mini .bar { height: 100%; border-radius: 2px; transition: width 0.6s cubic-bezier(0.16,1,0.3,1); }
 
-        /* === FINANCIAL SUMMARY === */
-        .fin-summary {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
-            margin-bottom: 24px;
-        }
+        /* Financial Summary */
+        .fin-summary { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 24px; }
         .fin-card {
             background: var(--bg-card); border: 1px solid var(--border-light);
-            border-radius: var(--radius-lg); padding: 20px 24px;
-            display: flex; align-items: center; gap: 18px;
+            border-radius: var(--radius-lg); padding: 18px 22px;
+            display: flex; align-items: center; gap: 16px;
             position: relative; overflow: hidden; transition: all var(--transition);
         }
         .fin-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
-        .fin-card::after {
-            content: ''; position: absolute; top: 0; bottom: 0; width: 4px;
-        }
+        .fin-card::after { content: ''; position: absolute; top: 0; bottom: 0; width: 4px; }
+        .fin-card.fin-due::after { background: linear-gradient(180deg, #6366f1, #4f46e5); }
         .fin-card.fin-paid::after { background: linear-gradient(180deg, #10b981, #059669); }
         .fin-card.fin-outstanding::after { background: linear-gradient(180deg, #ef4444, #dc2626); }
         .fin-card .fin-icon {
-            width: 48px; height: 48px; border-radius: 12px;
+            width: 44px; height: 44px; border-radius: 11px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 18px; flex-shrink: 0;
+            font-size: 16px; flex-shrink: 0;
         }
+        .fin-due .fin-icon { background: var(--info-bg); color: var(--info); }
         .fin-paid .fin-icon { background: var(--success-bg); color: var(--success); }
         .fin-outstanding .fin-icon { background: var(--danger-bg); color: var(--danger); }
-        .fin-card .fin-label { font-size: 12px; font-weight: 500; color: var(--text-muted); margin-bottom: 2px; }
+        .fin-card .fin-label { font-size: 11.5px; font-weight: 500; color: var(--text-muted); margin-bottom: 2px; }
         .fin-card .fin-amount {
-            font-size: 20px; font-weight: 800; letter-spacing: -0.5px;
+            font-size: 18px; font-weight: 800; letter-spacing: -0.5px;
             font-family: 'JetBrains Mono', monospace; line-height: 1.2;
         }
+        .fin-due .fin-amount { color: #4f46e5; }
         .fin-paid .fin-amount { color: #059669; }
         .fin-outstanding .fin-amount { color: #dc2626; }
         .fin-card .fin-count { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
 
-        /* === CARDS === */
+        /* Ops Card */
         .ops-card {
             background: var(--bg-card); border: 1px solid var(--border-light);
             border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);
@@ -219,7 +185,7 @@
         .ops-card-header .och-text span { font-size: 11.5px; color: var(--text-muted); }
         .ops-card-body { padding: 22px; }
 
-        /* === UPLOAD ZONE === */
+        /* Upload Zone */
         .upload-zone {
             border: 2px dashed var(--border); border-radius: var(--radius);
             padding: 40px 24px; text-align: center; transition: all var(--transition);
@@ -262,7 +228,7 @@
         }
         .file-info-bar .fib-remove:hover { color: var(--danger); }
 
-        /* === BUTTONS === */
+        /* Buttons */
         .btn-ops {
             display: inline-flex; align-items: center; gap: 8px;
             font-size: 13px; font-weight: 600; padding: 10px 20px;
@@ -278,42 +244,43 @@
         .btn-ops-success:hover { background: #059669; box-shadow: 0 4px 14px rgba(16,185,129,0.3); transform: translateY(-1px); }
         .btn-ops-sm { padding: 7px 14px; font-size: 12px; }
 
-        /* === TABLE === */
+        /* Table */
         .table-ops { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
         .table-ops thead th {
-            background: #f7f8fa; color: var(--text-muted); font-size: 11px; font-weight: 600;
-            text-transform: uppercase; letter-spacing: 0.6px; padding: 12px 16px;
+            background: #f7f8fa; color: var(--text-muted); font-size: 10.5px; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.6px; padding: 12px 12px;
             border-bottom: 1px solid var(--border); white-space: nowrap; position: sticky; top: 0; z-index: 2;
         }
         .table-ops thead th:first-child { border-radius: 8px 0 0 0; }
         .table-ops thead th:last-child { border-radius: 0 8px 0 0; }
         .table-ops tbody tr { transition: background var(--transition); }
         .table-ops tbody tr:hover { background: rgba(13,110,253,0.02); }
-        .table-ops tbody td { padding: 14px 16px; border-bottom: 1px solid var(--border-light); vertical-align: middle; }
+        .table-ops tbody td { padding: 13px 12px; border-bottom: 1px solid var(--border-light); vertical-align: middle; }
         .table-ops .cust-id {
-            font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 12.5px;
+            font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 12px;
             color: var(--text-primary); background: var(--bg-input);
-            padding: 4px 10px; border-radius: 4px; display: inline-block;
+            padding: 3px 9px; border-radius: 4px; display: inline-block;
         }
         .table-ops .cust-name { font-weight: 500; }
+        .table-ops .inv-num {
+            font-family: 'JetBrains Mono', monospace; font-size: 12px;
+            color: var(--text-secondary); font-weight: 500;
+        }
 
-        /* Tabel footer / summary row */
+        /* Table Footer */
         .table-ops tfoot td {
-            padding: 14px 16px; background: #f7f8fa; font-weight: 700;
-            border-top: 2px solid var(--border); border-bottom: none;
-            font-size: 13px;
+            padding: 14px 12px; background: #f7f8fa; font-weight: 700;
+            border-top: 2px solid var(--border); border-bottom: none; font-size: 13px;
         }
         .table-ops tfoot .total-label {
-            font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+            font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.5px;
             color: var(--text-muted); font-weight: 600;
         }
-        .table-ops tfoot .total-val {
-            font-family: 'JetBrains Mono', monospace; font-weight: 800;
-        }
-        .table-ops tfoot .total-paid { color: #059669; font-size: 14px; }
-        .table-ops tfoot .total-outstanding { color: #dc2626; font-size: 14px; }
+        .table-ops tfoot .total-val { font-family: 'JetBrains Mono', monospace; font-weight: 800; }
+        .table-ops tfoot .total-due { color: #4f46e5; font-size: 13px; }
+        .table-ops tfoot .total-paid { color: #059669; font-size: 13px; }
 
-        /* === BADGES === */
+        /* Badges */
         .badge-ops {
             display: inline-flex; align-items: center; gap: 5px;
             font-size: 11.5px; font-weight: 600; padding: 4px 10px;
@@ -333,25 +300,14 @@
         .badge-nodata { background: var(--gray-bg); color: var(--gray); }
         .badge-nodata .badge-dot { background: var(--gray); }
 
-        .ptp-tag {
-            display: inline-flex; align-items: center; gap: 6px;
-            font-size: 12px; font-weight: 500; padding: 5px 12px;
-            border-radius: var(--radius-sm); white-space: nowrap;
-        }
-        .ptp-tag i { font-size: 11px; }
-        .ptp-ontime { background: var(--success-bg); color: #059669; }
-        .ptp-done { background: rgba(99,102,241,0.08); color: #4f46e5; }
-        .ptp-pending { background: var(--warning-bg); color: #d97706; }
-        .ptp-broken { background: rgba(225,29,72,0.08); color: #e11d48; }
-        .ptp-none { background: var(--gray-bg); color: var(--gray); }
-
         .amount-cell { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 12.5px; }
         .amount-zero { color: var(--text-muted); }
-        .amount-outstanding { color: var(--danger); }
+        .amount-due { color: #4f46e5; }
+        .amount-paid { color: #059669; }
         .date-cell { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-secondary); }
-        .date-na { color: var(--text-muted); font-style: italic; font-family: inherit; }
+        .date-na { color: var(--text-muted); font-style: italic; font-family: inherit; font-size: 12.5px; }
 
-        /* === LOADING === */
+        /* Loading */
         .loading-overlay {
             display: none; position: absolute; inset: 0;
             background: rgba(255,255,255,0.85); backdrop-filter: blur(4px);
@@ -366,11 +322,8 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         .loading-text { font-size: 13px; color: var(--text-secondary); font-weight: 500; }
 
-        /* === TOAST === */
-        .toast-container {
-            position: fixed; top: 70px; right: 24px; z-index: 9999;
-            display: flex; flex-direction: column; gap: 8px;
-        }
+        /* Toast */
+        .toast-container { position: fixed; top: 70px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
         .toast-ops {
             background: var(--bg-card); border: 1px solid var(--border-light);
             border-radius: var(--radius); padding: 14px 18px; box-shadow: var(--shadow-lg);
@@ -390,7 +343,7 @@
 
         .result-actions { display: flex; align-items: center; gap: 10px; }
 
-        /* === FILTER BAR === */
+        /* Filter Bar */
         .filter-bar { display: flex; align-items: center; gap: 10px; padding: 14px 0; border-bottom: 1px solid var(--border-light); }
         .filter-bar .search-box {
             display: flex; align-items: center; gap: 8px;
@@ -412,9 +365,9 @@
         .filter-chip:hover { border-color: var(--accent); color: var(--accent); }
         .filter-chip.active { background: var(--accent-light); border-color: var(--accent); color: var(--accent); font-weight: 600; }
 
-        /* === TABLE WRAPPER === */
+        /* Table Wrapper */
         .table-wrapper {
-            max-height: 480px; overflow-y: auto;
+            max-height: 520px; overflow-y: auto;
             scrollbar-width: thin; scrollbar-color: var(--border) transparent;
         }
         .table-wrapper::-webkit-scrollbar { width: 6px; }
@@ -434,21 +387,21 @@
         .ops-footer { text-align: center; padding: 20px; font-size: 11.5px; color: var(--text-muted); }
         .ops-footer span { font-family: 'JetBrains Mono', monospace; }
 
-        /* === RESPONSIVE === */
-        @media (max-width: 768px) {
+        @media (max-width: 1100px) {
             .main-content { padding: 16px; }
-            .stat-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-            .stat-card { padding: 14px; }
-            .stat-card .sc-value { font-size: 18px; }
-            .stat-card .sc-value.val-rp { font-size: 14px; }
             .fin-summary { grid-template-columns: 1fr; }
             .topbar { padding: 0 16px; }
             .breadcrumb-bar { padding: 10px 16px; }
             .filter-bar { flex-wrap: wrap; }
             .filter-bar .search-box { max-width: 100%; }
-            .table-wrapper { max-height: 360px; }
+            .table-wrapper { max-height: 400px; }
         }
-        @media (max-width: 480px) {
+        @media (max-width: 768px) {
+            .stat-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+            .stat-card { padding: 14px; }
+            .stat-card .sc-value { font-size: 18px; }
+        }
+        @media (max-width: 580px) {
             .stat-grid { grid-template-columns: repeat(2, 1fr); }
             .topbar-right .timestamp { display: none; }
         }
@@ -458,8 +411,6 @@
             .stat-card:nth-child(1) { animation-delay: 0.03s; }
             .stat-card:nth-child(2) { animation-delay: 0.06s; }
             .stat-card:nth-child(3) { animation-delay: 0.09s; }
-            .stat-card:nth-child(4) { animation-delay: 0.12s; }
-            .stat-card:nth-child(5) { animation-delay: 0.15s; }
             .ops-card { animation: fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both; animation-delay: 0.1s; }
             .fin-card { animation: fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both; animation-delay: 0.08s; }
         }
@@ -468,7 +419,6 @@
 </head>
 <body>
 
-    <!-- Topbar -->
     <header class="topbar">
         <a class="topbar-brand" href="#">
             <div class="brand-icon"><i class="fas fa-bolt"></i></div>
@@ -484,7 +434,6 @@
         </div>
     </header>
 
-    <!-- Breadcrumb -->
     <nav class="breadcrumb-bar">
         <a href="#"><i class="fas fa-home" style="font-size:12px;"></i></a>
         <span class="sep"><i class="fas fa-chevron-right" style="font-size:9px;"></i></span>
@@ -493,14 +442,13 @@
         <a href="#">Payment Tracking</a>
         <span class="sep"><i class="fas fa-chevron-right" style="font-size:9px;"></i></span>
         <span class="current">Batch Checker</span>
-        <span class="page-title-inline"><i class="fas fa-shield-halved" style="margin-right:6px;color:var(--accent);font-size:12px;"></i>Customer Payment & PTP Tracker</span>
+        <span class="page-title-inline"><i class="fas fa-shield-halved" style="margin-right:6px;color:var(--accent);font-size:12px;"></i>Customer Payment Tracker</span>
     </nav>
 
-    <!-- Main Content -->
     <main class="main-content">
         <div class="page-header">
             <h1>Batch Payment Status Checker</h1>
-            <p>Upload file Excel berisi daftar <code style="background:var(--bg-input);padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:12px;">customer_id</code> untuk melakukan cross-check terhadap database pembayaran dan status Promise to Pay (PTP).</p>
+            <p>Upload file Excel berisi daftar <code style="background:var(--bg-input);padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:12px;">customer_id</code> untuk melakukan cross-check terhadap database pembayaran.</p>
         </div>
 
         <!-- Stat Cards -->
@@ -525,34 +473,28 @@
                 <div class="sc-sub">memiliki tunggakan</div>
                 <div class="progress-mini"><div class="bar" id="barUnpaid" style="width:0%;background:var(--danger);"></div></div>
             </div>
-            <div class="stat-card sc-ptp">
-                <div class="sc-icon"><i class="fas fa-clock"></i></div>
-                <div class="sc-label">PTP Pending</div>
-                <div class="sc-value" id="statPTP">0</div>
-                <div class="sc-sub">janji bayar aktif</div>
-                <div class="progress-mini"><div class="bar" id="barPTP" style="width:0%;background:var(--warning);"></div></div>
-            </div>
-            <div class="stat-card sc-broken">
-                <div class="sc-icon"><i class="fas fa-triangle-exclamation"></i></div>
-                <div class="sc-label">Broken Promise</div>
-                <div class="sc-value" id="statBroken">0</div>
-                <div class="sc-sub">gagal memenuhi PTP</div>
-                <div class="progress-mini"><div class="bar" id="barBroken" style="width:0%;background:#e11d48;"></div></div>
-            </div>
         </div>
 
-        <!-- Financial Summary (Total Paid & Total Outstanding) -->
+        <!-- Financial Summary -->
         <div class="fin-summary" id="finSummary" style="display:none;">
+            <div class="fin-card fin-due">
+                <div class="fin-icon"><i class="fas fa-file-invoice"></i></div>
+                <div>
+                    <div class="fin-label">Total Amount Due (Rp)</div>
+                    <div class="fin-amount" id="finTotalDue">Rp 0</div>
+                    <div class="fin-count" id="finDueCount">0 invoice</div>
+                </div>
+            </div>
             <div class="fin-card fin-paid">
                 <div class="fin-icon"><i class="fas fa-wallet"></i></div>
                 <div>
-                    <div class="fin-label">Total Paid (Rp)</div>
+                    <div class="fin-label">Total Amount Paid (Rp)</div>
                     <div class="fin-amount" id="finTotalPaid">Rp 0</div>
                     <div class="fin-count" id="finPaidCount">0 pelanggan lunas</div>
                 </div>
             </div>
             <div class="fin-card fin-outstanding">
-                <div class="fin-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                <div class="fin-icon"><i class="fas fa-triangle-exclamation"></i></div>
                 <div>
                     <div class="fin-label">Total Outstanding (Rp)</div>
                     <div class="fin-amount" id="finTotalOutstanding">Rp 0</div>
@@ -610,7 +552,7 @@
             <div class="ops-card-header">
                 <div class="och-icon" style="background:var(--success-bg);color:var(--success);"><i class="fas fa-table-list"></i></div>
                 <div class="och-text">
-                    <h3>Hasil Pengecekan & Tracking PTP</h3>
+                    <h3>Hasil Pengecekan Pembayaran</h3>
                     <span id="resultSubtitle">-</span>
                 </div>
                 <div style="margin-left:auto;">
@@ -622,10 +564,10 @@
                 </div>
             </div>
             <div style="padding:0 22px;">
-                <div class="filter-bar" id="filterBar">
+                <div class="filter-bar">
                     <div class="search-box">
                         <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Cari Customer ID atau nama..." id="searchInput" oninput="filterTable()">
+                        <input type="text" placeholder="Cari Customer ID, nama, atau invoice..." id="searchInput" oninput="filterTable()">
                     </div>
                     <button class="filter-chip active" data-filter="all" onclick="setFilter(this,'all')">Semua</button>
                     <button class="filter-chip" data-filter="PAID" onclick="setFilter(this,'PAID')"><i class="fas fa-circle-check" style="color:var(--success);font-size:10px;"></i> Paid</button>
@@ -643,25 +585,26 @@
                                 <th>Nama Pelanggan</th>
                                 <th>Status Customer</th>
                                 <th>Status Payment</th>
-                                <th>Tgl. Payment Terakhir</th>
-                                <th style="text-align:right;">Paid Amount (Rp)</th>
-                                <th style="text-align:right;">Outstanding (Rp)</th>
-                                <th>Last Root Cause</th>
+                                <th>Invoice Date</th>
+                                <th>Invoice Number</th>
+                                <th style="text-align:right;">Amount Due (Rp)</th>
+                                <th>Date Paid</th>
+                                <th style="text-align:right;">Amount Paid (Rp)</th>
                             </tr>
                         </thead>
                         <tbody id="tableBody"></tbody>
                         <tfoot id="tableFoot" style="display:none;">
                             <tr>
-                                <td colspan="6" style="text-align:right;">
-                                    <span class="total-label">Grand Total</span>
-                                </td>
+                                <td colspan="7"></td>
                                 <td style="text-align:right;">
-                                    <span class="total-val total-paid" id="footTotalPaid">Rp 0</span>
-                                </td>
-                                <td style="text-align:right;">
-                                    <span class="total-val total-outstanding" id="footTotalOutstanding">Rp 0</span>
+                                    <div class="total-label">Total Due</div>
+                                    <span class="total-val total-due" id="footTotalDue">Rp 0</span>
                                 </td>
                                 <td></td>
+                                <td style="text-align:right;">
+                                    <div class="total-label">Total Paid</div>
+                                    <span class="total-val total-paid" id="footTotalPaid">Rp 0</span>
+                                </td>
                             </tr>
                         </tfoot>
                     </table>
@@ -670,7 +613,7 @@
         </div>
 
         <footer class="ops-footer">
-            <span>Powered by Alvy Fahmy </br></span> &middot; Collections &amp; Recovery Module</span>
+            <span>PaymentOps v2.4.1</span> &middot; Collections &amp; Recovery Module &middot; Last sync: <span id="lastSync">-</span>
         </footer>
     </main>
 
@@ -680,7 +623,6 @@
         let processedData = [];
         let currentFilter = 'all';
 
-        // Jam hidup
         function updateClock() {
             const now = new Date();
             const str = now.toLocaleString('id-ID', {
@@ -693,20 +635,68 @@
         updateClock();
         setInterval(updateClock, 1000);
 
-        // === Database Simulasi (dengan paid_amount) ===
+        // === Database Simulasi (field lengkap sesuai urutan kolom) ===
         const mockDatabase = {
-            'CBN000001': { customer_name: 'Budi Santoso', customer_status: 'Active', payment_status: 'PAID', last_payment_date: '2025-07-28', paid_amount: 750000, outstanding_amount: 0, ptp_status: 'On Time' },
-            'CBN000002': { customer_name: 'Siti Aminah', customer_status: 'Freeze', payment_status: 'UNPAID', last_payment_date: '-', paid_amount: 0, outstanding_amount: 350000, ptp_status: 'Pending / Janji Bayar 10 Aug' },
-            'CBN000003': { customer_name: 'Ahmad Dani', customer_status: 'Active', payment_status: 'PAID', last_payment_date: '2025-08-01', paid_amount: 1200000, outstanding_amount: 0, ptp_status: 'Done' },
-            'CBN000004': { customer_name: 'Dewi Lestari', customer_status: 'Freeze', payment_status: 'UNPAID', last_payment_date: '-', paid_amount: 0, outstanding_amount: 500000, ptp_status: 'Broken Promise' },
-            'CBN000005': { customer_name: 'Joko Widodo', customer_status: 'Active', payment_status: 'PAID', last_payment_date: '2025-07-30', paid_amount: 900000, outstanding_amount: 0, ptp_status: 'On Time' },
-            'CBN000006': { customer_name: 'Rina Wulandari', customer_status: 'Active', payment_status: 'UNPAID', last_payment_date: '2025-06-15', paid_amount: 200000, outstanding_amount: 1250000, ptp_status: 'Pending / Janji Bayar 15 Aug' },
-            'CBN000007': { customer_name: 'Hendra Gunawan', customer_status: 'Freeze', payment_status: 'UNPAID', last_payment_date: '-', paid_amount: 0, outstanding_amount: 875000, ptp_status: 'Broken Promise' },
-            'CBN000008': { customer_name: 'Maya Putri', customer_status: 'Active', payment_status: 'PAID', last_payment_date: '2025-08-02', paid_amount: 540000, outstanding_amount: 0, ptp_status: 'Done' },
-            'CBN000009': { customer_name: 'Agus Prasetyo', customer_status: 'Active', payment_status: 'PAID', last_payment_date: '2025-07-25', paid_amount: 680000, outstanding_amount: 0, ptp_status: 'On Time' },
-            'CBN000010': { customer_name: 'Lina Marlina', customer_status: 'Freeze', payment_status: 'UNPAID', last_payment_date: '2025-05-10', paid_amount: 150000, outstanding_amount: 2100000, ptp_status: 'Pending / Janji Bayar 20 Aug' },
-            'CBN000011': { customer_name: 'Fajar Nugroho', customer_status: 'Active', payment_status: 'PAID', last_payment_date: '2025-08-03', paid_amount: 425000, outstanding_amount: 0, ptp_status: 'On Time' },
-            'CBN000012': { customer_name: 'Nita Sari', customer_status: 'Active', payment_status: 'UNPAID', last_payment_date: '2025-07-01', paid_amount: 100000, outstanding_amount: 450000, ptp_status: 'Broken Promise' }
+            'CBN000001': {
+                customer_name: 'Budi Santoso', customer_status: 'Active', payment_status: 'PAID',
+                invoice_date: '2025-07-15', invoice_number: 'INV-2025-0701',
+                amount_due: 750000, date_paid: '2025-07-28', amount_paid: 750000
+            },
+            'CBN000002': {
+                customer_name: 'Siti Aminah', customer_status: 'Freeze', payment_status: 'UNPAID',
+                invoice_date: '2025-07-20', invoice_number: 'INV-2025-0715',
+                amount_due: 350000, date_paid: '-', amount_paid: 0
+            },
+            'CBN000003': {
+                customer_name: 'Ahmad Dani', customer_status: 'Active', payment_status: 'PAID',
+                invoice_date: '2025-07-22', invoice_number: 'INV-2025-0722',
+                amount_due: 1200000, date_paid: '2025-08-01', amount_paid: 1200000
+            },
+            'CBN000004': {
+                customer_name: 'Dewi Lestari', customer_status: 'Freeze', payment_status: 'UNPAID',
+                invoice_date: '2025-07-10', invoice_number: 'INV-2025-0698',
+                amount_due: 500000, date_paid: '-', amount_paid: 0
+            },
+            'CBN000005': {
+                customer_name: 'Joko Widodo', customer_status: 'Active', payment_status: 'PAID',
+                invoice_date: '2025-07-18', invoice_number: 'INV-2025-0705',
+                amount_due: 900000, date_paid: '2025-07-30', amount_paid: 900000
+            },
+            'CBN000006': {
+                customer_name: 'Rina Wulandari', customer_status: 'Active', payment_status: 'UNPAID',
+                invoice_date: '2025-06-25', invoice_number: 'INV-2025-0650',
+                amount_due: 1450000, date_paid: '2025-07-10', amount_paid: 200000
+            },
+            'CBN000007': {
+                customer_name: 'Hendra Gunawan', customer_status: 'Freeze', payment_status: 'UNPAID',
+                invoice_date: '2025-07-05', invoice_number: 'INV-2025-0680',
+                amount_due: 875000, date_paid: '-', amount_paid: 0
+            },
+            'CBN000008': {
+                customer_name: 'Maya Putri', customer_status: 'Active', payment_status: 'PAID',
+                invoice_date: '2025-07-25', invoice_number: 'INV-2025-0730',
+                amount_due: 540000, date_paid: '2025-08-02', amount_paid: 540000
+            },
+            'CBN000009': {
+                customer_name: 'Agus Prasetyo', customer_status: 'Active', payment_status: 'PAID',
+                invoice_date: '2025-07-12', invoice_number: 'INV-2025-0690',
+                amount_due: 680000, date_paid: '2025-07-25', amount_paid: 680000
+            },
+            'CBN000010': {
+                customer_name: 'Lina Marlina', customer_status: 'Freeze', payment_status: 'UNPAID',
+                invoice_date: '2025-06-20', invoice_number: 'INV-2025-0635',
+                amount_due: 2250000, date_paid: '2025-07-05', amount_paid: 150000
+            },
+            'CBN000011': {
+                customer_name: 'Fajar Nugroho', customer_status: 'Active', payment_status: 'PAID',
+                invoice_date: '2025-07-28', invoice_number: 'INV-2025-0740',
+                amount_due: 425000, date_paid: '2025-08-03', amount_paid: 425000
+            },
+            'CBN000012': {
+                customer_name: 'Nita Sari', customer_status: 'Active', payment_status: 'UNPAID',
+                invoice_date: '2025-07-01', invoice_number: 'INV-2025-0660',
+                amount_due: 550000, date_paid: '2025-07-15', amount_paid: 100000
+            }
         };
 
         // === File Upload ===
@@ -768,16 +758,16 @@
                                 return {
                                     customer_id: custId, customer_name: db.customer_name,
                                     customer_status: db.customer_status, payment_status: db.payment_status,
-                                    last_payment_date: db.last_payment_date,
-                                    paid_amount: db.paid_amount, outstanding_amount: db.outstanding_amount,
-                                    promise_to_pay: db.ptp_status
+                                    invoice_date: db.invoice_date, invoice_number: db.invoice_number,
+                                    amount_due: db.amount_due, date_paid: db.date_paid,
+                                    amount_paid: db.amount_paid
                                 };
                             } else {
                                 return {
                                     customer_id: custId, customer_name: row.customer_name || row.Customer_Name || 'Tidak Ditemukan',
                                     customer_status: 'Unknown', payment_status: 'NO DATA',
-                                    last_payment_date: '-', paid_amount: 0, outstanding_amount: 0,
-                                    promise_to_pay: '-'
+                                    invoice_date: '-', invoice_number: '-',
+                                    amount_due: 0, date_paid: '-', amount_paid: 0
                                 };
                             }
                         });
@@ -802,20 +792,14 @@
             const total = processedData.length;
             const paid = processedData.filter(d => d.payment_status === 'PAID').length;
             const unpaid = processedData.filter(d => d.payment_status === 'UNPAID').length;
-            const ptp = processedData.filter(d => d.promise_to_pay.toLowerCase().includes('pending')).length;
-            const broken = processedData.filter(d => d.promise_to_pay.toLowerCase().includes('broken')).length;
 
             document.getElementById('statTotal').textContent = total;
             document.getElementById('statPaid').textContent = paid;
             document.getElementById('statUnpaid').textContent = unpaid;
-            document.getElementById('statPTP').textContent = ptp;
-            document.getElementById('statBroken').textContent = broken;
 
             const pct = (v) => total > 0 ? ((v / total) * 100).toFixed(0) + '%' : '0%';
             document.getElementById('barPaid').style.width = pct(paid);
             document.getElementById('barUnpaid').style.width = pct(unpaid);
-            document.getElementById('barPTP').style.width = pct(ptp);
-            document.getElementById('barBroken').style.width = pct(broken);
 
             document.getElementById('statGrid').style.display = 'grid';
             document.getElementById('resultSubtitle').textContent = `Menampilkan ${total} record — diproses pada ${new Date().toLocaleString('id-ID')}`;
@@ -823,22 +807,35 @@
 
         // === Financial Summary ===
         function updateFinancialSummary() {
-            const totalPaid = processedData.reduce((s, d) => s + d.paid_amount, 0);
-            const totalOutstanding = processedData.reduce((s, d) => s + d.outstanding_amount, 0);
+            const totalDue = processedData.reduce((s, d) => s + d.amount_due, 0);
+            const totalPaid = processedData.reduce((s, d) => s + d.amount_paid, 0);
+            const totalOutstanding = totalDue - totalPaid;
             const paidCount = processedData.filter(d => d.payment_status === 'PAID').length;
             const unpaidCount = processedData.filter(d => d.payment_status === 'UNPAID').length;
 
+            document.getElementById('finTotalDue').textContent = 'Rp ' + totalDue.toLocaleString('id-ID');
             document.getElementById('finTotalPaid').textContent = 'Rp ' + totalPaid.toLocaleString('id-ID');
             document.getElementById('finTotalOutstanding').textContent = 'Rp ' + totalOutstanding.toLocaleString('id-ID');
+            document.getElementById('finDueCount').textContent = processedData.length + ' invoice';
             document.getElementById('finPaidCount').textContent = paidCount + ' pelanggan lunas';
             document.getElementById('finOutstandingCount').textContent = unpaidCount + ' pelanggan menunggak';
 
-            // Footer tabel
+            document.getElementById('footTotalDue').textContent = 'Rp ' + totalDue.toLocaleString('id-ID');
             document.getElementById('footTotalPaid').textContent = 'Rp ' + totalPaid.toLocaleString('id-ID');
-            document.getElementById('footTotalOutstanding').textContent = 'Rp ' + totalOutstanding.toLocaleString('id-ID');
             document.getElementById('tableFoot').style.display = '';
-
             document.getElementById('finSummary').style.display = 'grid';
+        }
+
+        // === Format tanggal Indonesia ===
+        function formatTanggal(dateStr) {
+            if (!dateStr || dateStr === '-') return '<span class="date-na">-</span>';
+            const parts = dateStr.split('-');
+            if (parts.length !== 3) return '<span class="date-cell">' + dateStr + '</span>';
+            const bulan = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+            const d = parseInt(parts[2], 10);
+            const m = parseInt(parts[1], 10) - 1;
+            const y = parts[0];
+            return `<span class="date-cell">${d} ${bulan[m]} ${y}</span>`;
         }
 
         // === Display Results ===
@@ -847,7 +844,7 @@
             tbody.innerHTML = '';
 
             if (data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9">
+                tbody.innerHTML = `<tr><td colspan="10">
                     <div class="empty-state">
                         <div class="es-icon"><i class="fas fa-filter-circle-xmark"></i></div>
                         <div class="es-title">Tidak ada data yang cocok</div>
@@ -858,35 +855,43 @@
                 return;
             }
 
-            // Jumlah berdasarkan filtered data
-            let fTotalPaid = 0, fTotalOutstanding = 0;
-            data.forEach(d => { fTotalPaid += d.paid_amount; fTotalOutstanding += d.outstanding_amount; });
+            let fTotalDue = 0, fTotalPaid = 0;
+            data.forEach(d => { fTotalDue += d.amount_due; fTotalPaid += d.amount_paid; });
+            document.getElementById('footTotalDue').textContent = 'Rp ' + fTotalDue.toLocaleString('id-ID');
             document.getElementById('footTotalPaid').textContent = 'Rp ' + fTotalPaid.toLocaleString('id-ID');
-            document.getElementById('footTotalOutstanding').textContent = 'Rp ' + fTotalOutstanding.toLocaleString('id-ID');
             document.getElementById('tableFoot').style.display = '';
 
             data.forEach((item, idx) => {
+                // Customer status badge
                 let csBadge = '';
                 if (item.customer_status === 'Active') csBadge = `<span class="badge-ops badge-active"><span class="badge-dot"></span>Active</span>`;
                 else if (item.customer_status === 'Freeze') csBadge = `<span class="badge-ops badge-freeze"><span class="badge-dot"></span>Freeze</span>`;
                 else csBadge = `<span class="badge-ops badge-unknown"><span class="badge-dot"></span>Unknown</span>`;
 
+                // Payment status badge
                 let psBadge = '';
                 if (item.payment_status === 'PAID') psBadge = `<span class="badge-ops badge-paid"><span class="badge-dot"></span>PAID</span>`;
                 else if (item.payment_status === 'UNPAID') psBadge = `<span class="badge-ops badge-unpaid"><span class="badge-dot"></span>UNPAID</span>`;
                 else psBadge = `<span class="badge-ops badge-nodata"><span class="badge-dot"></span>NO DATA</span>`;
 
-                let dateCell = item.last_payment_date === '-' ?
-                    `<span class="date-na">-</span>` :
-                    `<span class="date-cell">${item.last_payment_date}</span>`;
+                // Invoice date
+                let invDate = formatTanggal(item.invoice_date);
 
-                let paidClass = item.paid_amount > 0 ? '' : 'amount-zero';
-                let paidText = item.paid_amount > 0 ? item.paid_amount.toLocaleString('id-ID') : '0';
+                // Invoice number
+                let invNum = item.invoice_number === '-' ?
+                    '<span class="date-na">-</span>' :
+                    `<span class="inv-num">${item.invoice_number}</span>`;
 
-                let outClass = item.outstanding_amount > 0 ? 'amount-outstanding' : 'amount-zero';
-                let outText = item.outstanding_amount > 0 ? item.outstanding_amount.toLocaleString('id-ID') : '0';
+                // Amount due
+                let dueClass = item.amount_due > 0 ? 'amount-due' : 'amount-zero';
+                let dueText = item.amount_due > 0 ? item.amount_due.toLocaleString('id-ID') : '0';
 
-                let ptpTag = getPTPTag(item.promise_to_pay);
+                // Date paid
+                let datePaid = formatTanggal(item.date_paid);
+
+                // Amount paid
+                let paidClass = item.amount_paid > 0 ? 'amount-paid' : 'amount-zero';
+                let paidText = item.amount_paid > 0 ? item.amount_paid.toLocaleString('id-ID') : '0';
 
                 let tr = `<tr data-status="${item.payment_status}">
                     <td style="text-align:center;color:var(--text-muted);font-size:12px;font-family:'JetBrains Mono',monospace;">${idx + 1}</td>
@@ -894,22 +899,14 @@
                     <td><span class="cust-name">${item.customer_name}</span></td>
                     <td>${csBadge}</td>
                     <td>${psBadge}</td>
-                    <td>${dateCell}</td>
-                    <td style="text-align:right;"><span class="amount-cell ${paidClass}" style="${item.paid_amount > 0 ? 'color:#059669;' : ''}">${paidText}</span></td>
-                    <td style="text-align:right;"><span class="amount-cell ${outClass}">${outText}</span></td>
-                    <td>${ptpTag}</td>
+                    <td>${invDate}</td>
+                    <td>${invNum}</td>
+                    <td style="text-align:right;"><span class="amount-cell ${dueClass}">${dueText}</span></td>
+                    <td>${datePaid}</td>
+                    <td style="text-align:right;"><span class="amount-cell ${paidClass}">${paidText}</span></td>
                 </tr>`;
                 tbody.innerHTML += tr;
             });
-        }
-
-        function getPTPTag(ptp) {
-            const lower = ptp.toLowerCase();
-            if (lower.includes('on time')) return `<span class="ptp-tag ptp-ontime"><i class="fas fa-check-circle"></i> On Time</span>`;
-            if (lower.includes('done')) return `<span class="ptp-tag ptp-done"><i class="fas fa-circle-check"></i> Done</span>`;
-            if (lower.includes('pending') || lower.includes('janji')) return `<span class="ptp-tag ptp-pending"><i class="fas fa-clock"></i> ${ptp}</span>`;
-            if (lower.includes('broken')) return `<span class="ptp-tag ptp-broken"><i class="fas fa-triangle-exclamation"></i> Broken Promise</span>`;
-            return `<span class="ptp-tag ptp-none"><i class="fas fa-minus"></i> -</span>`;
         }
 
         // === Filter ===
@@ -923,37 +920,47 @@
             const query = document.getElementById('searchInput').value.toLowerCase().trim();
             let filtered = processedData;
             if (currentFilter !== 'all') filtered = filtered.filter(d => d.payment_status === currentFilter);
-            if (query) filtered = filtered.filter(d => d.customer_id.toLowerCase().includes(query) || d.customer_name.toLowerCase().includes(query));
+            if (query) filtered = filtered.filter(d =>
+                d.customer_id.toLowerCase().includes(query) ||
+                d.customer_name.toLowerCase().includes(query) ||
+                d.invoice_number.toLowerCase().includes(query)
+            );
             displayResults(filtered);
         }
 
-        // === Export ===
+        // === Export Excel ===
         function exportToExcel() {
             if (processedData.length === 0) { showToast('Tidak ada data untuk di-export.', 'error'); return; }
-            const totalPaid = processedData.reduce((s, d) => s + d.paid_amount, 0);
-            const totalOutstanding = processedData.reduce((s, d) => s + d.outstanding_amount, 0);
+            const totalDue = processedData.reduce((s, d) => s + d.amount_due, 0);
+            const totalPaid = processedData.reduce((s, d) => s + d.amount_paid, 0);
 
             const exportRows = processedData.map((d, i) => ({
-                'No': i + 1, 'Customer ID': d.customer_id, 'Nama Pelanggan': d.customer_name,
-                'Status Customer': d.customer_status, 'Status Payment': d.payment_status,
-                'Tgl. Payment Terakhir': d.last_payment_date,
-                'Paid Amount (Rp)': d.paid_amount, 'Outstanding (Rp)': d.outstanding_amount,
-                'Last Root Cause': d.promise_to_pay
+                'No': i + 1,
+                'Customer ID': d.customer_id,
+                'Nama Pelanggan': d.customer_name,
+                'Status Customer': d.customer_status,
+                'Status Payment': d.payment_status,
+                'Invoice Date': d.invoice_date,
+                'Invoice Number': d.invoice_number,
+                'Amount Due (Rp)': d.amount_due,
+                'Date Paid': d.date_paid,
+                'Amount Paid (Rp)': d.amount_paid
             }));
-            // Tambah baris total
             exportRows.push({});
             exportRows.push({
                 'No': '', 'Customer ID': '', 'Nama Pelanggan': '',
                 'Status Customer': '', 'Status Payment': 'GRAND TOTAL',
-                'Tgl. Payment Terakhir': '',
-                'Paid Amount (Rp)': totalPaid, 'Outstanding (Rp)': totalOutstanding,
-                'Last Root Cause': ''
+                'Invoice Date': '', 'Invoice Number': '',
+                'Amount Due (Rp)': totalDue,
+                'Date Paid': '',
+                'Amount Paid (Rp)': totalPaid
             });
 
             const worksheet = XLSX.utils.json_to_sheet(exportRows);
             worksheet['!cols'] = [
                 { wch: 5 }, { wch: 14 }, { wch: 22 }, { wch: 14 },
-                { wch: 14 }, { wch: 18 }, { wch: 18 }, { wch: 18 }, { wch: 30 }
+                { wch: 14 }, { wch: 14 }, { wch: 18 }, { wch: 18 },
+                { wch: 14 }, { wch: 18 }
             ];
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "Payment_Tracking");
