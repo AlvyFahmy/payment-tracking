@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Ops — Customer Payment & PTP Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        :root {
+            --bg-body: #f0f2f5;
+            --bg-card: #ffffff;
+            --bg-sidebar: #0f2b46;
+            --bg-sidebar-hover: #163a5c;
+            --bg-input: #f7f8fa;
+            --border: #e2e6ec;
+            --border-light: #eef0f4;
+            --text-primary: #1a2332;
+            --text-secondary: #5a6a7e;
+            --text-muted: #8c97a6;
+            --accent: #0d6efd;
+            --accent-hover: #0b5ed7;
+            --accent-light: rgba(13,110,253,0.08);
+            --success: #10b981;
+            --success-bg: rgba(16,185,129,0.08);
+            --danger: #ef4444;
+            --danger-bg: rgba(239,68,68,0.08);
+            --warning: #f59e0b;
+            --warning-bg: rgba(245,158,11,0.08);
+            --info: #6366f1;
+            --info-bg: rgba(99,102,241,0.08);
+            --gray: #6b7280;
+            --gray-bg: rgba(107,114,128,0.08);
+            --radius: 10px;
+            --radius-sm: 6px;
+            --radius-lg: 14px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+            --transition: 0.2s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-body);
+            color: var(--text-primary);
+            margin: 0;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* === TOPBAR === */
+        .topbar {
+            background: var(--bg-sidebar);
+            height: 56px;
+            display: flex;
+            align-items: center;
+            padding: 0 28px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+        }
+        .topbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+            text-decoration: none;
+        }
+        .topbar-brand .brand-icon {
+            width: 34px;
+            height: 34px;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .topbar-brand .brand-text {
+            font-weight: 700;
+            font-size: 15px;
+            letter-spacing: -0.3px;
+            white-space: nowrap;
+        }
+        .topbar-brand .brand-sub {
+            font-size: 11px;
+            color: rgba(255,255,255,0.5);
+            font-weight: 400;
+            display: block;
+            margin-top: -2px;
+        }
+        .topbar-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .topbar-right .env-badge {
+            background: rgba(16,185,129,0.15);
+            color: #34d399;
+            font-size: 10.5px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .topbar-right .timestamp {
+            color: rgba(255,255,255,0.45);
+            font-size: 12px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .topbar-right .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* === BREADCRUMB === */
+        .breadcrumb-bar {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-light);
+            padding: 12px 28px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12.5px;
+        }
+        .breadcrumb-bar a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color var(--transition);
+        }
+        .breadcrumb-bar a:hover { color: var(--accent); }
+        .breadcrumb-bar .sep { color: var(--text-muted); }
+        .breadcrumb-bar .current { color: var(--text-primary); font-weight: 600; }
+        .breadcrumb-bar .page-title-inline {
+            margin-left: auto;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        /* === MAIN === */
+        .main-content {
+            padding: 28px;
+            max-width: 1360px;
+            margin: 0 auto;
+        }
+
+        /* === PAGE HEADER === */
+        .page-header {
+            margin-bottom: 24px;
+        }
+        .page-header h1 {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin: 0 0 6px;
+        }
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 13.5px;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* === STAT CARDS === */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            transition: all var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+        .stat-card.sc-total::before { background: var(--accent); }
+        .stat-card.sc-paid::before { background: var(--success); }
+        .stat-card.sc-unpaid::before { background: var(--danger); }
+        .stat-card.sc-ptp::before { background: var(--warning); }
+        .stat-card.sc-broken::before { background: #e11d48; }
+        .stat-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
+        }
+        .stat-card .sc-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            margin-bottom: 14px;
+        }
+        .sc-total .sc-icon { background: var(--accent-light); color: var(--accent); }
+        .sc-paid .sc-icon { background: var(--success-bg); color: var(--success); }
+        .sc-unpaid .sc-icon { background: var(--danger-bg); color: var(--danger); }
+        .sc-ptp .sc-icon { background: var(--warning-bg); color: var(--warning); }
+        .sc-broken .sc-icon { background: rgba(225,29,72,0.08); color: #e11d48; }
+        .stat-card .sc-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        .stat-card .sc-value {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .stat-card .sc-sub {
+            font-size: 11.5px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* === CARDS === */
+        .ops-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+        .ops-card-header {
+            padding: 18px 22px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .ops-card-header .och-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--accent-light);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+        .ops-card-header .och-text h3 {
+            font-size: 14px;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: -0.2px;
+        }
+        .ops-card-header .och-text span {
+            font-size: 11.5px;
+            color: var(--text-muted);
+        }
+        .ops-card-body {
+            padding: 22px;
+        }
+
+        /* === UPLOAD ZONE === */
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 40px 24px;
+            text-align: center;
+            transition: all var(--transition);
+            cursor: pointer;
+            background: var(--bg-input);
+            position: relative;
+        }
+        .upload-zone:hover,
+        .upload-zone.dragover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+        .upload-zone .uz-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: var(--accent-light);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin: 0 auto 16px;
+            transition: all var(--transition);
+        }
+        .upload-zone:hover .uz-icon {
+            transform: scale(1.08);
+            background: rgba(13,110,253,0.14);
+        }
+        .upload-zone .uz-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .upload-zone .uz-desc {
+            font-size: 12.5px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+        .upload-zone .uz-formats {
+            display: inline-flex;
+            gap: 6px;
+        }
+        .upload-zone .uz-formats span {
+            font-size: 10.5px;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            padding: 3px 10px;
+            border-radius: 4px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+        #excelFile { display: none; }
+
+        /* File info bar */
+        .file-info-bar {
+            display: none;
+            align-items: center;
+            gap: 12px;
+            margin-top: 16px;
+            padding: 12px 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+        }
+        .file-info-bar.show { display: flex; }
+        .file-info-bar .fib-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--success-bg);
+            color: var(--success);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        .file-info-bar .fib-name {
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .file-info-bar .fib-size {
+            font-size: 11.5px;
+            color: var(--text-muted);
+        }
+        .file-info-bar .fib-remove {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 14px;
+            padding: 4px;
+            transition: color var(--transition);
+        }
+        .file-info-bar .fib-remove:hover { color: var(--danger); }
+
+        /* === BUTTONS === */
+        .btn-ops {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition);
+            font-family: inherit;
+            letter-spacing: -0.1px;
+        }
+        .btn-ops-primary {
+            background: var(--accent);
+            color: #fff;
+        }
+        .btn-ops-primary:hover {
+            background: var(--accent-hover);
+            box-shadow: 0 4px 14px rgba(13,110,253,0.3);
+            transform: translateY(-1px);
+        }
+        .btn-ops-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .btn-ops-outline {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+        .btn-ops-outline:hover {
+            background: var(--bg-input);
+            color: var(--text-primary);
+            border-color: var(--text-muted);
+        }
+        .btn-ops-success {
+            background: var(--success);
+            color: #fff;
+        }
+        .btn-ops-success:hover {
+            background: #059669;
+            box-shadow: 0 4px 14px rgba(16,185,129,0.3);
+            transform: translateY(-1px);
+        }
+        .btn-ops-sm {
+            padding: 7px 14px;
+            font-size: 12px;
+        }
+
+        /* === TABLE === */
+        .table-ops {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 13px;
+        }
+        .table-ops thead th {
+            background: #f7f8fa;
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+        }
+        .table-ops thead th:first-child { border-radius: 8px 0 0 0; }
+        .table-ops thead th:last-child { border-radius: 0 8px 0 0; }
+        .table-ops tbody tr {
+            transition: background var(--transition);
+        }
+        .table-ops tbody tr:hover {
+            background: rgba(13,110,253,0.02);
+        }
+        .table-ops tbody td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-light);
+            vertical-align: middle;
+        }
+        .table-ops .cust-id {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 12.5px;
+            color: var(--text-primary);
+            background: var(--bg-input);
+            padding: 4px 10px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .table-ops .cust-name {
+            font-weight: 500;
+        }
+
+        /* === BADGES === */
+        .badge-ops {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11.5px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+        .badge-ops .badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .badge-active { background: var(--success-bg); color: #059669; }
+        .badge-active .badge-dot { background: var(--success); }
+        .badge-freeze { background: var(--danger-bg); color: #dc2626; }
+        .badge-freeze .badge-dot { background: var(--danger); }
+        .badge-unknown { background: var(--gray-bg); color: var(--gray); }
+        .badge-unknown .badge-dot { background: var(--gray); }
+        .badge-paid { background: var(--success-bg); color: #059669; }
+        .badge-paid .badge-dot { background: var(--success); }
+        .badge-unpaid { background: var(--danger-bg); color: #dc2626; }
+        .badge-unpaid .badge-dot { background: var(--danger); }
+        .badge-nodata { background: var(--gray-bg); color: var(--gray); }
+        .badge-nodata .badge-dot { background: var(--gray); }
+
+        /* PTP Badges */
+        .ptp-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 5px 12px;
+            border-radius: var(--radius-sm);
+            white-space: nowrap;
+        }
+        .ptp-tag i { font-size: 11px; }
+        .ptp-ontime { background: var(--success-bg); color: #059669; }
+        .ptp-done { background: rgba(99,102,241,0.08); color: #4f46e5; }
+        .ptp-pending { background: var(--warning-bg); color: #d97706; }
+        .ptp-broken { background: rgba(225,29,72,0.08); color: #e11d48; }
+        .ptp-none { background: var(--gray-bg); color: var(--gray); }
+
+        .amount-cell {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 12.5px;
+        }
+        .amount-zero { color: var(--text-muted); }
+        .amount-outstanding { color: var(--danger); }
+
+        .date-cell {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .date-na { color: var(--text-muted); font-style: italic; font-family: inherit; }
+
+        /* === LOADING STATE === */
+        .loading-overlay {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(4px);
+            z-index: 10;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 16px;
+            border-radius: var(--radius-lg);
+        }
+        .loading-overlay.show { display: flex; }
+        .spinner-ops {
+            width: 36px;
+            height: 36px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* === TOAST === */
+        .toast-container {
+            position: fixed;
+            top: 70px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .toast-ops {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            padding: 14px 18px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            min-width: 300px;
+            animation: toastIn 0.35s cubic-bezier(0.16,1,0.3,1);
+            transition: all 0.3s ease;
+        }
+        .toast-ops.toast-out {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+        .toast-ops .toast-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+        .toast-success .toast-icon { background: var(--success-bg); color: var(--success); }
+        .toast-error .toast-icon { background: var(--danger-bg); color: var(--danger); }
+        .toast-info .toast-icon { background: var(--accent-light); color: var(--accent); }
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* === RESULT CARD ACTIONS === */
+        .result-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .result-actions .record-count {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            margin-left: 8px;
+        }
+
+        /* === TABLE FILTER BAR === */
+        .filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 0;
+        }
+        .filter-bar .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 7px 12px;
+            flex: 1;
+            max-width: 280px;
+            transition: border-color var(--transition);
+        }
+        .filter-bar .search-box:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(13,110,253,0.08);
+        }
+        .filter-bar .search-box i { color: var(--text-muted); font-size: 13px; }
+        .filter-bar .search-box input {
+            border: none;
+            background: none;
+            outline: none;
+            font-size: 12.5px;
+            font-family: inherit;
+            color: var(--text-primary);
+            width: 100%;
+        }
+        .filter-bar .search-box input::placeholder { color: var(--text-muted); }
+        .filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11.5px;
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition);
+            white-space: nowrap;
+        }
+        .filter-chip:hover { border-color: var(--accent); color: var(--accent); }
+        .filter-chip.active {
+            background: var(--accent-light);
+            border-color: var(--accent);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* === TABLE WRAPPER === */
+        .table-wrapper {
+            max-height: 480px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) transparent;
+        }
+        .table-wrapper::-webkit-scrollbar { width: 6px; }
+        .table-wrapper::-webkit-scrollbar-track { background: transparent; }
+        .table-wrapper::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+        .table-wrapper::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+        /* === EMPTY STATE === */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .empty-state .es-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: var(--bg-input);
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin: 0 auto 16px;
+        }
+        .empty-state .es-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .empty-state .es-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* === PROGRESS BAR === */
+        .progress-mini {
+            height: 4px;
+            background: var(--border-light);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        .progress-mini .bar {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.6s cubic-bezier(0.16,1,0.3,1);
+        }
+
+        /* === FOOTER === */
+        .ops-footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 11.5px;
+            color: var(--text-muted);
+        }
+        .ops-footer span { font-family: 'JetBrains Mono', monospace; }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 768px) {
+            .main-content { padding: 16px; }
+            .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .stat-card { padding: 14px; }
+            .stat-card .sc-value { font-size: 20px; }
+            .topbar { padding: 0 16px; }
+            .breadcrumb-bar { padding: 10px 16px; }
+            .filter-bar { flex-wrap: wrap; }
+            .filter-bar .search-box { max-width: 100%; }
+            .result-actions { flex-wrap: wrap; }
+            .table-wrapper { max-height: 360px; }
+        }
+        @media (max-width: 480px) {
+            .stat-grid { grid-template-columns: 1fr; }
+            .topbar-right .timestamp { display: none; }
+        }
+
+        /* Subtle entrance animations */
+        @media (prefers-reduced-motion: no-preference) {
+            .stat-card { animation: fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both; }
+            .stat-card:nth-child(1) { animation-delay: 0.03s; }
+            .stat-card:nth-child(2) { animation-delay: 0.06s; }
+            .stat-card:nth-child(3) { animation-delay: 0.09s; }
+            .stat-card:nth-child(4) { animation-delay: 0.12s; }
+            .stat-card:nth-child(5) { animation-delay: 0.15s; }
+            .ops-card { animation: fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both; animation-delay: 0.1s; }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Topbar -->
+    <header class="topbar">
+        <a class="topbar-brand" href="#">
+            <div class="brand-icon"><i class="fas fa-bolt"></i></div>
+            <div>
+                <div class="brand-text">PaymentOps</div>
+                <span class="brand-sub">Collections &amp; Recovery</span>
+            </div>
+        </a>
+        <div class="topbar-right">
+            <span class="env-badge"><i class="fas fa-circle" style="font-size:6px;margin-right:4px;vertical-align:middle;"></i> Production</span>
+            <span class="timestamp" id="liveTime"></span>
+            <div class="avatar" title="Admin">AD</div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb-bar">
+        <a href="#"><i class="fas fa-home" style="font-size:12px;"></i></a>
+        <span class="sep"><i class="fas fa-chevron-right" style="font-size:9px;"></i></span>
+        <a href="#">Operations</a>
+        <span class="sep"><i class="fas fa-chevron-right" style="font-size:9px;"></i></span>
+        <a href="#">Payment Tracking</a>
+        <span class="sep"><i class="fas fa-chevron-right" style="font-size:9px;"></i></span>
+        <span class="current">Batch Checker</span>
+        <span class="page-title-inline"><i class="fas fa-shield-halved" style="margin-right:6px;color:var(--accent);font-size:12px;"></i>Customer Payment & PTP Tracker</span>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Batch Payment Status Checker</h1>
+            <p>Upload file Excel berisi daftar <code style="background:var(--bg-input);padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:12px;">customer_id</code> untuk melakukan cross-check terhadap database pembayaran dan status Promise to Pay (PTP).</p>
+        </div>
+
+        <!-- Stat Cards (tersembunyi sampai ada data) -->
+        <div class="stat-grid" id="statGrid" style="display:none;">
+            <div class="stat-card sc-total">
+                <div class="sc-icon"><i class="fas fa-database"></i></div>
+                <div class="sc-label">Total Diperiksa</div>
+                <div class="sc-value" id="statTotal">0</div>
+                <div class="sc-sub">record dari file upload</div>
+            </div>
+            <div class="stat-card sc-paid">
+                <div class="sc-icon"><i class="fas fa-circle-check"></i></div>
+                <div class="sc-label">Paid</div>
+                <div class="sc-value" id="statPaid">0</div>
+                <div class="sc-sub">pembayaran lunas</div>
+                <div class="progress-mini"><div class="bar" id="barPaid" style="width:0%;background:var(--success);"></div></div>
+            </div>
+            <div class="stat-card sc-unpaid">
+                <div class="sc-icon"><i class="fas fa-circle-xmark"></i></div>
+                <div class="sc-label">Unpaid</div>
+                <div class="sc-value" id="statUnpaid">0</div>
+                <div class="sc-sub">memiliki tunggakan</div>
+                <div class="progress-mini"><div class="bar" id="barUnpaid" style="width:0%;background:var(--danger);"></div></div>
+            </div>
+            <div class="stat-card sc-ptp">
+                <div class="sc-icon"><i class="fas fa-clock"></i></div>
+                <div class="sc-label">PTP Pending</div>
+                <div class="sc-value" id="statPTP">0</div>
+                <div class="sc-sub">janji bayar aktif</div>
+                <div class="progress-mini"><div class="bar" id="barPTP" style="width:0%;background:var(--warning);"></div></div>
+            </div>
+            <div class="stat-card sc-broken">
+                <div class="sc-icon"><i class="fas fa-triangle-exclamation"></i></div>
+                <div class="sc-label">Broken Promise</div>
+                <div class="sc-value" id="statBroken">0</div>
+                <div class="sc-sub">gagal memenuhi PTP</div>
+                <div class="progress-mini"><div class="bar" id="barBroken" style="width:0%;background:#e11d48;"></div></div>
+            </div>
+        </div>
+
+        <!-- Upload Card -->
+        <div class="ops-card" id="uploadCard">
+            <div class="ops-card-header">
+                <div class="och-icon"><i class="fas fa-cloud-arrow-up"></i></div>
+                <div class="och-text">
+                    <h3>Data Source</h3>
+                    <span>Upload file Excel atau CSV yang berisi daftar Customer ID</span>
+                </div>
+            </div>
+            <div class="ops-card-body">
+                <div class="upload-zone" id="uploadZone" onclick="document.getElementById('excelFile').click()">
+                    <div class="uz-icon"><i class="fas fa-file-excel"></i></div>
+                    <div class="uz-title">Klik untuk memilih file atau drag & drop di sini</div>
+                    <div class="uz-desc">Kolom wajib: <strong>customer_id</strong> — Kolom opsional: customer_name</div>
+                    <div class="uz-formats">
+                        <span>.XLSX</span>
+                        <span>.XLS</span>
+                        <span>.CSV</span>
+                    </div>
+                </div>
+                <input type="file" id="excelFile" accept=".xlsx, .xls, .csv">
+                <div class="file-info-bar" id="fileInfoBar">
+                    <div class="fib-icon"><i class="fas fa-file-check"></i></div>
+                    <div>
+                        <div class="fib-name" id="fileName">-</div>
+                        <div class="fib-size" id="fileSize">-</div>
+                    </div>
+                    <button class="fib-remove" onclick="removeFile()" title="Hapus file"><i class="fas fa-xmark"></i></button>
+                </div>
+                <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;">
+                    <button class="btn-ops btn-ops-primary" id="btnProcess" onclick="processData()" disabled>
+                        <i class="fas fa-magnifying-glass-chart"></i> Proses Pengecekan Database
+                    </button>
+                    <button class="btn-ops btn-ops-outline" onclick="downloadTemplate()">
+                        <i class="fas fa-download"></i> Download Template
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Card -->
+        <div class="ops-card" id="resultCard" style="display:none;position:relative;">
+            <div class="loading-overlay" id="loadingOverlay">
+                <div class="spinner-ops"></div>
+                <div class="loading-text">Memproses data terhadap database...</div>
+            </div>
+            <div class="ops-card-header">
+                <div class="och-icon" style="background:var(--success-bg);color:var(--success);"><i class="fas fa-table-list"></i></div>
+                <div class="och-text">
+                    <h3>Hasil Pengecekan & Tracking PTP</h3>
+                    <span id="resultSubtitle">-</span>
+                </div>
+                <div style="margin-left:auto;">
+                    <div class="result-actions">
+                        <button class="btn-ops btn-ops-success btn-ops-sm" onclick="exportToExcel()">
+                            <i class="fas fa-file-arrow-down"></i> Export Excel
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Bar -->
+            <div style="padding:0 22px;">
+                <div class="filter-bar" id="filterBar">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Cari Customer ID atau nama..." id="searchInput" oninput="filterTable()">
+                    </div>
+                    <button class="filter-chip active" data-filter="all" onclick="setFilter(this,'all')">Semua</button>
+                    <button class="filter-chip" data-filter="PAID" onclick="setFilter(this,'PAID')"><i class="fas fa-circle-check" style="color:var(--success);font-size:10px;"></i> Paid</button>
+                    <button class="filter-chip" data-filter="UNPAID" onclick="setFilter(this,'UNPAID')"><i class="fas fa-circle-xmark" style="color:var(--danger);font-size:10px;"></i> Unpaid</button>
+                    <button class="filter-chip" data-filter="NO DATA" onclick="setFilter(this,'NO DATA')"><i class="fas fa-circle-question" style="color:var(--gray);font-size:10px;"></i> No Data</button>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div style="padding:0 22px 22px;">
+                <div class="table-wrapper">
+                    <table class="table-ops" id="resultTable">
+                        <thead>
+                            <tr>
+                                <th style="width:40px;text-align:center;">#</th>
+                                <th>Customer ID</th>
+                                <th>Nama Pelanggan</th>
+                                <th>Status Customer</th>
+                                <th>Status Payment</th>
+                                <th>Tgl. Payment Terakhir</th>
+                                <th style="text-align:right;">Outstanding (Rp)</th>
+                                <th>Last Root Cause</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="ops-footer">
+            <span>Powered by Alvy Fahmy </br> Recovery Module &middot; Last sync: <span id="lastSync">-</span>
+        </footer>
+    </main>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // === Data & State ===
+        let processedData = [];
+        let currentFilter = 'all';
+
+        // Jam hidup di topbar
+        function updateClock() {
+            const now = new Date();
+            const str = now.toLocaleString('id-ID', {
+                day: '2-digit', month: 'short', year: 'numeric',
+                hour: '2-digit', minute: '2-digit', second: '2-digit'
+            });
+            document.getElementById('liveTime').textContent = str;
+            document.getElementById('lastSync').textContent = str;
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // === Database Simulasi (lebih lengkap) ===
+        const mockDatabase = {
+            'CBN000001': { customer_name: 'Budi Santoso', customer_status: 'Active', payment_status: 'PAID', last_payment_date: '2025-07-28', outstanding_amount: 0, ptp_status: 'On Time' },
+            'CBN000002': { customer_name: 'Siti Aminah', customer_status: 'Freeze', payment_status: 'UNPAID', last_payment_date: '-', outstanding_amount: 350000, ptp_status: 'Pending / Janji Bayar 10 Aug' },
+            'CBN000003': { customer_name: 'Ahmad Dani', customer_status: 'Active', payment_status: 'PAID', last_payment_date: '2025-08-01', outstanding_amount: 0, ptp_status: 'Done' },
+            'CBN000004': { customer_name: 'Dewi Lestari', customer_status: 'Freeze', payment_status: 'UNPAID', last_payment_date: '-', outstanding_amount: 500000, ptp_status: 'Broken Promise' },
+            'CBN000005': { customer_name: 'Joko Widodo', customer_status: 'Active', payment_status: 'PAID', last_payment_date: '2025-07-30', outstanding_amount: 0, ptp_status: 'On Time' },
+            'CBN000006': { customer_name: 'Rina Wulandari', customer_status: 'Active', payment_status: 'UNPAID', last_payment_date: '2025-06-15', outstanding_amount: 1250000, ptp_status: 'Pending / Janji Bayar 15 Aug' },
+            'CBN000007': { customer_name: 'Hendra Gunawan', customer_status: 'Freeze', payment_status: 'UNPAID', last_payment_date: '-', outstanding_amount: 875000, ptp_status: 'Broken Promise' },
+            'CBN000008': { customer_name: 'Maya Putri', customer_status: 'Active', payment_status: 'PAID', last_payment_date: '2025-08-02', outstanding_amount: 0, ptp_status: 'Done' },
+            'CBN000009': { customer_name: 'Agus Prasetyo', customer_status: 'Active', payment_status: 'PAID', last_payment_date: '2025-07-25', outstanding_amount: 0, ptp_status: 'On Time' },
+            'CBN000010': { customer_name: 'Lina Marlina', customer_status: 'Freeze', payment_status: 'UNPAID', last_payment_date: '2025-05-10', outstanding_amount: 2100000, ptp_status: 'Pending / Janji Bayar 20 Aug' },
+            'CBN000011': { customer_name: 'Fajar Nugroho', customer_status: 'Active', payment_status: 'PAID', last_payment_date: '2025-08-03', outstanding_amount: 0, ptp_status: 'On Time' },
+            'CBN000012': { customer_name: 'Nita Sari', customer_status: 'Active', payment_status: 'UNPAID', last_payment_date: '2025-07-01', outstanding_amount: 450000, ptp_status: 'Broken Promise' }
+        };
+
+        // === File Upload Logic ===
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('excelFile');
+        const btnProcess = document.getElementById('btnProcess');
+
+        // Drag & Drop
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length > 0) {
+                fileInput.files = e.dataTransfer.files;
+                showFileInfo(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                showFileInfo(fileInput.files[0]);
+            }
+        });
+
+        function showFileInfo(file) {
+            document.getElementById('fileName').textContent = file.name;
+            const sizeKB = (file.size / 1024).toFixed(1);
+            const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+            document.getElementById('fileSize').textContent = file.size > 1048576 ? `${sizeMB} MB` : `${sizeKB} KB`;
+            document.getElementById('fileInfoBar').classList.add('show');
+            btnProcess.disabled = false;
+        }
+
+        function removeFile() {
+            fileInput.value = '';
+            document.getElementById('fileInfoBar').classList.remove('show');
+            btnProcess.disabled = true;
+        }
+
+        // === Process Data ===
+        function processData() {
+            if (fileInput.files.length === 0) {
+                showToast('Silakan pilih file terlebih dahulu.', 'error');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            const overlay = document.getElementById('loadingOverlay');
+
+            // Tampilkan loading
+            document.getElementById('resultCard').style.display = 'block';
+            overlay.classList.add('show');
+
+            reader.onload = function (e) {
+                // Simulasi delay untuk efek loading
+                setTimeout(() => {
+                    try {
+                        const data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, { type: 'array' });
+                        const firstSheetName = workbook.SheetNames[0];
+                        const worksheet = workbook.Sheets[firstSheetName];
+                        const rows = XLSX.utils.sheet_to_json(worksheet);
+
+                        if (rows.length === 0) {
+                            overlay.classList.remove('show');
+                            document.getElementById('resultCard').style.display = 'none';
+                            showToast('File Excel kosong atau format tidak sesuai.', 'error');
+                            return;
+                        }
+
+                        processedData = rows.map(row => {
+                            let custId = row.customer_id || row.Customer_ID || row['Customer ID'] || Object.values(row)[0];
+                            custId = String(custId).trim();
+                            let dbRecord = mockDatabase[custId];
+
+                            if (dbRecord) {
+                                return {
+                                    customer_id: custId,
+                                    customer_name: dbRecord.customer_name,
+                                    customer_status: dbRecord.customer_status,
+                                    payment_status: dbRecord.payment_status,
+                                    last_payment_date: dbRecord.last_payment_date,
+                                    outstanding_amount: dbRecord.outstanding_amount,
+                                    promise_to_pay: dbRecord.ptp_status
+                                };
+                            } else {
+                                return {
+                                    customer_id: custId,
+                                    customer_name: row.customer_name || row.Customer_Name || 'Tidak Ditemukan',
+                                    customer_status: 'Unknown',
+                                    payment_status: 'NO DATA',
+                                    last_payment_date: '-',
+                                    outstanding_amount: 0,
+                                    promise_to_pay: '-'
+                                };
+                            }
+                        });
+
+                        updateStats();
+                        displayResults(processedData);
+                        overlay.classList.remove('show');
+                        showToast(`${processedData.length} record berhasil diproses.`, 'success');
+                    } catch (err) {
+                        overlay.classList.remove('show');
+                        document.getElementById('resultCard').style.display = 'none';
+                        showToast('Gagal membaca file: ' + err.message, 'error');
+                    }
+                }, 1200);
+            };
+
+            reader.readAsArrayBuffer(file);
+        }
+
+        // === Update Stat Cards ===
+        function updateStats() {
+            const total = processedData.length;
+            const paid = processedData.filter(d => d.payment_status === 'PAID').length;
+            const unpaid = processedData.filter(d => d.payment_status === 'UNPAID').length;
+            const ptp = processedData.filter(d => d.promise_to_pay.toLowerCase().includes('pending')).length;
+            const broken = processedData.filter(d => d.promise_to_pay.toLowerCase().includes('broken')).length;
+
+            document.getElementById('statTotal').textContent = total;
+            document.getElementById('statPaid').textContent = paid;
+            document.getElementById('statUnpaid').textContent = unpaid;
+            document.getElementById('statPTP').textContent = ptp;
+            document.getElementById('statBroken').textContent = broken;
+
+            const pct = (v) => total > 0 ? ((v / total) * 100).toFixed(0) + '%' : '0%';
+            document.getElementById('barPaid').style.width = pct(paid);
+            document.getElementById('barUnpaid').style.width = pct(unpaid);
+            document.getElementById('barPTP').style.width = pct(ptp);
+            document.getElementById('barBroken').style.width = pct(broken);
+
+            document.getElementById('statGrid').style.display = 'grid';
+            document.getElementById('resultSubtitle').textContent = `Menampilkan ${total} record — diproses pada ${new Date().toLocaleString('id-ID')}`;
+        }
+
+        // === Display Results ===
+        function displayResults(data) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8">
+                    <div class="empty-state">
+                        <div class="es-icon"><i class="fas fa-filter-circle-xmark"></i></div>
+                        <div class="es-title">Tidak ada data yang cocok</div>
+                        <div class="es-desc">Coba ubah filter atau kata kunci pencarian.</div>
+                    </div>
+                </td></tr>`;
+                return;
+            }
+
+            data.forEach((item, idx) => {
+                // Badge customer status
+                let csBadge = '';
+                if (item.customer_status === 'Active') csBadge = `<span class="badge-ops badge-active"><span class="badge-dot"></span>Active</span>`;
+                else if (item.customer_status === 'Freeze') csBadge = `<span class="badge-ops badge-freeze"><span class="badge-dot"></span>Freeze</span>`;
+                else csBadge = `<span class="badge-ops badge-unknown"><span class="badge-dot"></span>Unknown</span>`;
+
+                // Badge payment status
+                let psBadge = '';
+                if (item.payment_status === 'PAID') psBadge = `<span class="badge-ops badge-paid"><span class="badge-dot"></span>PAID</span>`;
+                else if (item.payment_status === 'UNPAID') psBadge = `<span class="badge-ops badge-unpaid"><span class="badge-dot"></span>UNPAID</span>`;
+                else psBadge = `<span class="badge-ops badge-nodata"><span class="badge-dot"></span>NO DATA</span>`;
+
+                // Date cell
+                let dateCell = item.last_payment_date === '-' ?
+                    `<span class="date-na">-</span>` :
+                    `<span class="date-cell">${item.last_payment_date}</span>`;
+
+                // Amount cell
+                let amtClass = item.outstanding_amount > 0 ? 'amount-outstanding' : 'amount-zero';
+                let amtText = item.outstanding_amount > 0 ? item.outstanding_amount.toLocaleString('id-ID') : '0';
+
+                // PTP tag
+                let ptpTag = getPTPTag(item.promise_to_pay);
+
+                let tr = `<tr data-status="${item.payment_status}">
+                    <td style="text-align:center;color:var(--text-muted);font-size:12px;font-family:'JetBrains Mono',monospace;">${idx + 1}</td>
+                    <td><span class="cust-id">${item.customer_id}</span></td>
+                    <td><span class="cust-name">${item.customer_name}</span></td>
+                    <td>${csBadge}</td>
+                    <td>${psBadge}</td>
+                    <td>${dateCell}</td>
+                    <td style="text-align:right;"><span class="amount-cell ${amtClass}">${amtText}</span></td>
+                    <td>${ptpTag}</td>
+                </tr>`;
+                tbody.innerHTML += tr;
+            });
+        }
+
+        function getPTPTag(ptp) {
+            const lower = ptp.toLowerCase();
+            if (lower.includes('on time')) return `<span class="ptp-tag ptp-ontime"><i class="fas fa-check-circle"></i> On Time</span>`;
+            if (lower.includes('done')) return `<span class="ptp-tag ptp-done"><i class="fas fa-circle-check"></i> Done</span>`;
+            if (lower.includes('pending') || lower.includes('janji')) return `<span class="ptp-tag ptp-pending"><i class="fas fa-clock"></i> ${ptp}</span>`;
+            if (lower.includes('broken')) return `<span class="ptp-tag ptp-broken"><i class="fas fa-triangle-exclamation"></i> Broken Promise</span>`;
+            return `<span class="ptp-tag ptp-none"><i class="fas fa-minus"></i> -</span>`;
+        }
+
+        // === Filter ===
+        function setFilter(el, filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            filterTable();
+        }
+
+        function filterTable() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            let filtered = processedData;
+
+            // Filter by status
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(d => d.payment_status === currentFilter);
+            }
+
+            // Filter by search
+            if (query) {
+                filtered = filtered.filter(d =>
+                    d.customer_id.toLowerCase().includes(query) ||
+                    d.customer_name.toLowerCase().includes(query)
+                );
+            }
+
+            displayResults(filtered);
+        }
+
+        // === Export Excel ===
+        function exportToExcel() {
+            if (processedData.length === 0) {
+                showToast('Tidak ada data untuk di-export.', 'error');
+                return;
+            }
+
+            const exportData = processedData.map((d, i) => ({
+                'No': i + 1,
+                'Customer ID': d.customer_id,
+                'Nama Pelanggan': d.customer_name,
+                'Status Customer': d.customer_status,
+                'Status Payment': d.payment_status,
+                'Tgl. Payment Terakhir': d.last_payment_date,
+                'Outstanding (Rp)': d.outstanding_amount,
+                'Promise to Pay': d.promise_to_pay
+            }));
+
+            const worksheet = XLSX.utils.json_to_sheet(exportData);
+
+            // Set lebar kolom
+            worksheet['!cols'] = [
+                { wch: 5 }, { wch: 14 }, { wch: 22 }, { wch: 14 },
+                { wch: 14 }, { wch: 18 }, { wch: 16 }, { wch: 30 }
+            ];
+
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Payment_Tracking");
+            XLSX.writeFile(workbook, `Payment_Tracking_${getDateStamp()}.xlsx`);
+            showToast('File Excel berhasil di-download.', 'success');
+        }
+
+        // === Download Template ===
+        function downloadTemplate() {
+            const ids = [
+                'CBN000001','CBN000002','CBN000003','CBN000004','CBN000005',
+                'CBN000006','CBN000007','CBN000008','CBN000009','CBN000010',
+                'CBN000011','CBN000012','CBN000013','CBN000014','CBN000015'
+            ];
+            const templateData = ids.map(id => ({ customer_id: id }));
+            const worksheet = XLSX.utils.json_to_sheet(templateData);
+            worksheet['!cols'] = [{ wch: 16 }];
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Template_Customer_ID");
+            XLSX.writeFile(workbook, "Template_Customer_ID.xlsx");
+            showToast('Template berhasil di-download.', 'info');
+        }
+
+        // === Toast Notification ===
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const iconMap = {
+                success: 'fa-check',
+                error: 'fa-xmark',
+                info: 'fa-info'
+            };
+            const toast = document.createElement('div');
+            toast.className = `toast-ops toast-${type}`;
+            toast.innerHTML = `
+                <div class="toast-icon"><i class="fas ${iconMap[type]}"></i></div>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('toast-out');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // === Utilitas ===
+        function getDateStamp() {
+            const d = new Date();
+            return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}_${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}`;
+        }
+
+        // Keyboard shortcut: Enter untuk proses
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !btnProcess.disabled) {
+                processData();
+            }
+        });
+    </script>
+</body>
+</html>
