@@ -87,7 +87,7 @@
         .breadcrumb-bar .current { color: var(--text-primary); font-weight: 600; }
         .breadcrumb-bar .page-title-inline { margin-left: auto; font-weight: 600; font-size: 13px; color: var(--text-primary); }
 
-        .main-content { padding: 28px; max-width: 1480px; margin: 0 auto; }
+        .main-content { padding: 28px; max-width: 1580px; margin: 0 auto; }
 
         .page-header { margin-bottom: 24px; }
         .page-header h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; margin: 0 0 6px; }
@@ -265,6 +265,11 @@
         .table-ops .inv-num {
             font-family: 'JetBrains Mono', monospace; font-size: 12px;
             color: var(--text-secondary); font-weight: 500;
+        }
+        .agent-pill {
+            font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500;
+            color: var(--info); background: var(--info-bg); padding: 3px 8px; border-radius: 4px;
+            display: inline-block;
         }
 
         /* Table Footer */
@@ -590,6 +595,7 @@
                                 <th style="text-align:right;">Amount Due (Rp)</th>
                                 <th>Date Paid</th>
                                 <th style="text-align:right;">Amount Paid (Rp)</th>
+                                <th>Retention Success By</th>
                             </tr>
                         </thead>
                         <tbody id="tableBody"></tbody>
@@ -605,6 +611,7 @@
                                     <div class="total-label">Total Paid</div>
                                     <span class="total-val total-paid" id="footTotalPaid">Rp 0</span>
                                 </td>
+                                <td></td>
                             </tr>
                         </tfoot>
                     </table>
@@ -635,67 +642,79 @@
         updateClock();
         setInterval(updateClock, 1000);
 
-        // === Database Simulasi (field lengkap sesuai urutan kolom) ===
+        // === Database Simulasi (dengan tambahan field retention_success_by) ===
         const mockDatabase = {
             'CBN000001': {
                 customer_name: 'Budi Santoso', customer_status: 'Active', payment_status: 'PAID',
                 invoice_date: '2025-07-15', invoice_number: 'INV-2025-0701',
-                amount_due: 750000, date_paid: '2025-07-28', amount_paid: 750000
+                amount_due: 750000, date_paid: '2025-07-28', amount_paid: 750000,
+                retention_success_by: 'Agent_Rian'
             },
             'CBN000002': {
                 customer_name: 'Siti Aminah', customer_status: 'Freeze', payment_status: 'UNPAID',
                 invoice_date: '2025-07-20', invoice_number: 'INV-2025-0715',
-                amount_due: 350000, date_paid: '-', amount_paid: 0
+                amount_due: 350000, date_paid: '-', amount_paid: 0,
+                retention_success_by: '-'
             },
             'CBN000003': {
                 customer_name: 'Ahmad Dani', customer_status: 'Active', payment_status: 'PAID',
                 invoice_date: '2025-07-22', invoice_number: 'INV-2025-0722',
-                amount_due: 1200000, date_paid: '2025-08-01', amount_paid: 1200000
+                amount_due: 1200000, date_paid: '2025-08-01', amount_paid: 1200000,
+                retention_success_by: 'Agent_Siska'
             },
             'CBN000004': {
                 customer_name: 'Dewi Lestari', customer_status: 'Freeze', payment_status: 'UNPAID',
                 invoice_date: '2025-07-10', invoice_number: 'INV-2025-0698',
-                amount_due: 500000, date_paid: '-', amount_paid: 0
+                amount_due: 500000, date_paid: '-', amount_paid: 0,
+                retention_success_by: '-'
             },
             'CBN000005': {
                 customer_name: 'Joko Widodo', customer_status: 'Active', payment_status: 'PAID',
                 invoice_date: '2025-07-18', invoice_number: 'INV-2025-0705',
-                amount_due: 900000, date_paid: '2025-07-30', amount_paid: 900000
+                amount_due: 900000, date_paid: '2025-07-30', amount_paid: 900000,
+                retention_success_by: 'Agent_Budi'
             },
             'CBN000006': {
                 customer_name: 'Rina Wulandari', customer_status: 'Active', payment_status: 'UNPAID',
                 invoice_date: '2025-06-25', invoice_number: 'INV-2025-0650',
-                amount_due: 1450000, date_paid: '2025-07-10', amount_paid: 200000
+                amount_due: 1450000, date_paid: '2025-07-10', amount_paid: 200000,
+                retention_success_by: 'Agent_Dewi'
             },
             'CBN000007': {
                 customer_name: 'Hendra Gunawan', customer_status: 'Freeze', payment_status: 'UNPAID',
                 invoice_date: '2025-07-05', invoice_number: 'INV-2025-0680',
-                amount_due: 875000, date_paid: '-', amount_paid: 0
+                amount_due: 875000, date_paid: '-', amount_paid: 0,
+                retention_success_by: '-'
             },
             'CBN000008': {
                 customer_name: 'Maya Putri', customer_status: 'Active', payment_status: 'PAID',
                 invoice_date: '2025-07-25', invoice_number: 'INV-2025-0730',
-                amount_due: 540000, date_paid: '2025-08-02', amount_paid: 540000
+                amount_due: 540000, date_paid: '2025-08-02', amount_paid: 540000,
+                retention_success_by: 'Agent_Rian'
             },
             'CBN000009': {
                 customer_name: 'Agus Prasetyo', customer_status: 'Active', payment_status: 'PAID',
                 invoice_date: '2025-07-12', invoice_number: 'INV-2025-0690',
-                amount_due: 680000, date_paid: '2025-07-25', amount_paid: 680000
+                amount_due: 680000, date_paid: '2025-07-25', amount_paid: 680000,
+                retention_success_by: 'Agent_Siska'
             },
             'CBN000010': {
                 customer_name: 'Lina Marlina', customer_status: 'Freeze', payment_status: 'UNPAID',
                 invoice_date: '2025-06-20', invoice_number: 'INV-2025-0635',
-                amount_due: 2250000, date_paid: '2025-07-05', amount_paid: 150000
+                amount_due: 2250000, date_paid: '2025-07-05', amount_paid: 150000,
+                retention_success_by: 'Agent_Budi'
             },
             'CBN000011': {
                 customer_name: 'Fajar Nugroho', customer_status: 'Active', payment_status: 'PAID',
                 invoice_date: '2025-07-28', invoice_number: 'INV-2025-0740',
-                amount_due: 425000, date_paid: '2025-08-03', amount_paid: 425000
+                amount_due: 425000, date_paid: '2025-08-03', amount_paid: 425000,
+                retention_success_by: 'Agent_Dewi'
             },
             'CBN000012': {
                 customer_name: 'Nita Sari', customer_status: 'Active', payment_status: 'UNPAID',
                 invoice_date: '2025-07-01', invoice_number: 'INV-2025-0660',
-                amount_due: 550000, date_paid: '2025-07-15', amount_paid: 100000
+                amount_due: 550000, date_paid: '2025-07-15', amount_paid: 100000,
+                retention_success_by: 'Agent_Rian'
             }
         };
 
@@ -760,14 +779,15 @@
                                     customer_status: db.customer_status, payment_status: db.payment_status,
                                     invoice_date: db.invoice_date, invoice_number: db.invoice_number,
                                     amount_due: db.amount_due, date_paid: db.date_paid,
-                                    amount_paid: db.amount_paid
+                                    amount_paid: db.amount_paid, retention_success_by: db.retention_success_by
                                 };
                             } else {
                                 return {
                                     customer_id: custId, customer_name: row.customer_name || row.Customer_Name || 'Tidak Ditemukan',
                                     customer_status: 'Unknown', payment_status: 'NO DATA',
                                     invoice_date: '-', invoice_number: '-',
-                                    amount_due: 0, date_paid: '-', amount_paid: 0
+                                    amount_due: 0, date_paid: '-', amount_paid: 0,
+                                    retention_success_by: '-'
                                 };
                             }
                         });
@@ -844,7 +864,7 @@
             tbody.innerHTML = '';
 
             if (data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="10">
+                tbody.innerHTML = `<tr><td colspan="11">
                     <div class="empty-state">
                         <div class="es-icon"><i class="fas fa-filter-circle-xmark"></i></div>
                         <div class="es-title">Tidak ada data yang cocok</div>
@@ -893,6 +913,9 @@
                 let paidClass = item.amount_paid > 0 ? 'amount-paid' : 'amount-zero';
                 let paidText = item.amount_paid > 0 ? item.amount_paid.toLocaleString('id-ID') : '0';
 
+                // Retention success by
+                let agentVal = item.retention_success_by === '-' ? '<span class="date-na">-</span>' : `<span class="agent-pill">${item.retention_success_by}</span>`;
+
                 let tr = `<tr data-status="${item.payment_status}">
                     <td style="text-align:center;color:var(--text-muted);font-size:12px;font-family:'JetBrains Mono',monospace;">${idx + 1}</td>
                     <td><span class="cust-id">${item.customer_id}</span></td>
@@ -904,6 +927,7 @@
                     <td style="text-align:right;"><span class="amount-cell ${dueClass}">${dueText}</span></td>
                     <td>${datePaid}</td>
                     <td style="text-align:right;"><span class="amount-cell ${paidClass}">${paidText}</span></td>
+                    <td>${agentVal}</td>
                 </tr>`;
                 tbody.innerHTML += tr;
             });
@@ -923,7 +947,8 @@
             if (query) filtered = filtered.filter(d =>
                 d.customer_id.toLowerCase().includes(query) ||
                 d.customer_name.toLowerCase().includes(query) ||
-                d.invoice_number.toLowerCase().includes(query)
+                d.invoice_number.toLowerCase().includes(query) ||
+                d.retention_success_by.toLowerCase().includes(query)
             );
             displayResults(filtered);
         }
@@ -944,7 +969,8 @@
                 'Invoice Number': d.invoice_number,
                 'Amount Due (Rp)': d.amount_due,
                 'Date Paid': d.date_paid,
-                'Amount Paid (Rp)': d.amount_paid
+                'Amount Paid (Rp)': d.amount_paid,
+                'Retention Success By': d.retention_success_by
             }));
             exportRows.push({});
             exportRows.push({
@@ -953,14 +979,15 @@
                 'Invoice Date': '', 'Invoice Number': '',
                 'Amount Due (Rp)': totalDue,
                 'Date Paid': '',
-                'Amount Paid (Rp)': totalPaid
+                'Amount Paid (Rp)': totalPaid,
+                'Retention Success By': ''
             });
 
             const worksheet = XLSX.utils.json_to_sheet(exportRows);
             worksheet['!cols'] = [
                 { wch: 5 }, { wch: 14 }, { wch: 22 }, { wch: 14 },
                 { wch: 14 }, { wch: 14 }, { wch: 18 }, { wch: 18 },
-                { wch: 14 }, { wch: 18 }
+                { wch: 14 }, { wch: 18 }, { wch: 22 }
             ];
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "Payment_Tracking");
