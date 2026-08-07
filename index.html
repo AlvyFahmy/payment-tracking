@@ -87,7 +87,7 @@
         .breadcrumb-bar .current { color: var(--text-primary); font-weight: 600; }
         .breadcrumb-bar .page-title-inline { margin-left: auto; font-weight: 600; font-size: 13px; color: var(--text-primary); }
 
-        .main-content { padding: 28px; max-width: 1580px; margin: 0 auto; }
+        .main-content { padding: 28px; max-width: 1650px; margin: 0 auto; }
 
         .page-header { margin-bottom: 24px; }
         .page-header h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; margin: 0 0 6px; }
@@ -265,6 +265,11 @@
         .table-ops .inv-num {
             font-family: 'JetBrains Mono', monospace; font-size: 12px;
             color: var(--text-secondary); font-weight: 500;
+        }
+        .service-pill {
+            font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 600;
+            color: #0369a1; background: rgba(3, 105, 161, 0.08); padding: 3px 8px; border-radius: 4px;
+            display: inline-block; white-space: nowrap;
         }
         .agent-pill {
             font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500;
@@ -572,7 +577,7 @@
                 <div class="filter-bar">
                     <div class="search-box">
                         <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Cari Customer ID, nama, atau invoice..." id="searchInput" oninput="filterTable()">
+                        <input type="text" placeholder="Cari Customer ID, nama, service, atau invoice..." id="searchInput" oninput="filterTable()">
                     </div>
                     <button class="filter-chip active" data-filter="all" onclick="setFilter(this,'all')">Semua</button>
                     <button class="filter-chip" data-filter="PAID" onclick="setFilter(this,'PAID')"><i class="fas fa-circle-check" style="color:var(--success);font-size:10px;"></i> Paid</button>
@@ -588,6 +593,7 @@
                                 <th style="width:40px;text-align:center;">#</th>
                                 <th>Customer ID</th>
                                 <th>Nama Pelanggan</th>
+                                <th>Service Type / Product</th>
                                 <th>Status Customer</th>
                                 <th>Status Payment</th>
                                 <th>Invoice Date</th>
@@ -601,7 +607,7 @@
                         <tbody id="tableBody"></tbody>
                         <tfoot id="tableFoot" style="display:none;">
                             <tr>
-                                <td colspan="7"></td>
+                                <td colspan="8"></td>
                                 <td style="text-align:right;">
                                     <div class="total-label">Total Due</div>
                                     <span class="total-val total-due" id="footTotalDue">Rp 0</span>
@@ -620,7 +626,7 @@
         </div>
 
         <footer class="ops-footer">
-            <span>PaymentOps v2.4.1</span> &middot; Collections &amp; Recovery Module &middot; Last sync: <span id="lastSync">-</span>
+            <span>PaymentOps v2.4.2</span> &middot; Collections &amp; Recovery Module &middot; Last sync: <span id="lastSync">-</span>
         </footer>
     </main>
 
@@ -642,76 +648,76 @@
         updateClock();
         setInterval(updateClock, 1000);
 
-        // === Database Simulasi (dengan tambahan field retention_success_by) ===
+        // === Database Simulasi (dengan tambahan field service_type) ===
         const mockDatabase = {
             'CBN000001': {
-                customer_name: 'Budi Santoso', customer_status: 'Active', payment_status: 'PAID',
+                customer_name: 'Budi Santoso', service_type: 'CBN Fiber 75', customer_status: 'Active', payment_status: 'PAID',
                 invoice_date: '2025-07-15', invoice_number: 'INV-2025-0701',
                 amount_due: 750000, date_paid: '2025-07-28', amount_paid: 750000,
                 retention_success_by: 'Agent_Rian'
             },
             'CBN000002': {
-                customer_name: 'Siti Aminah', customer_status: 'Freeze', payment_status: 'UNPAID',
+                customer_name: 'Siti Aminah', service_type: 'CBN Fiber 100', customer_status: 'Freeze', payment_status: 'UNPAID',
                 invoice_date: '2025-07-20', invoice_number: 'INV-2025-0715',
                 amount_due: 350000, date_paid: '-', amount_paid: 0,
                 retention_success_by: '-'
             },
             'CBN000003': {
-                customer_name: 'Ahmad Dani', customer_status: 'Active', payment_status: 'PAID',
+                customer_name: 'Ahmad Dani', service_type: 'CBN Fiber 50', customer_status: 'Active', payment_status: 'PAID',
                 invoice_date: '2025-07-22', invoice_number: 'INV-2025-0722',
                 amount_due: 1200000, date_paid: '2025-08-01', amount_paid: 1200000,
                 retention_success_by: 'Agent_Siska'
             },
             'CBN000004': {
-                customer_name: 'Dewi Lestari', customer_status: 'Freeze', payment_status: 'UNPAID',
+                customer_name: 'Dewi Lestari', service_type: 'CBN Fiber 75', customer_status: 'Freeze', payment_status: 'UNPAID',
                 invoice_date: '2025-07-10', invoice_number: 'INV-2025-0698',
                 amount_due: 500000, date_paid: '-', amount_paid: 0,
                 retention_success_by: '-'
             },
             'CBN000005': {
-                customer_name: 'Joko Widodo', customer_status: 'Active', payment_status: 'PAID',
+                customer_name: 'Joko Widodo', service_type: 'CBN Fiber 100', customer_status: 'Active', payment_status: 'PAID',
                 invoice_date: '2025-07-18', invoice_number: 'INV-2025-0705',
                 amount_due: 900000, date_paid: '2025-07-30', amount_paid: 900000,
                 retention_success_by: 'Agent_Budi'
             },
             'CBN000006': {
-                customer_name: 'Rina Wulandari', customer_status: 'Active', payment_status: 'UNPAID',
+                customer_name: 'Rina Wulandari', service_type: 'CBN Fiber 20 - New', customer_status: 'Active', payment_status: 'UNPAID',
                 invoice_date: '2025-06-25', invoice_number: 'INV-2025-0650',
                 amount_due: 1450000, date_paid: '2025-07-10', amount_paid: 200000,
                 retention_success_by: 'Agent_Dewi'
             },
             'CBN000007': {
-                customer_name: 'Hendra Gunawan', customer_status: 'Freeze', payment_status: 'UNPAID',
+                customer_name: 'Hendra Gunawan', service_type: 'CBN Fiber 50', customer_status: 'Freeze', payment_status: 'UNPAID',
                 invoice_date: '2025-07-05', invoice_number: 'INV-2025-0680',
                 amount_due: 875000, date_paid: '-', amount_paid: 0,
                 retention_success_by: '-'
             },
             'CBN000008': {
-                customer_name: 'Maya Putri', customer_status: 'Active', payment_status: 'PAID',
+                customer_name: 'Maya Putri', service_type: 'CBN Fiber 20 - New', customer_status: 'Active', payment_status: 'PAID',
                 invoice_date: '2025-07-25', invoice_number: 'INV-2025-0730',
                 amount_due: 540000, date_paid: '2025-08-02', amount_paid: 540000,
                 retention_success_by: 'Agent_Rian'
             },
             'CBN000009': {
-                customer_name: 'Agus Prasetyo', customer_status: 'Active', payment_status: 'PAID',
+                customer_name: 'Agus Prasetyo', service_type: 'CBN Fiber 50', customer_status: 'Active', payment_status: 'PAID',
                 invoice_date: '2025-07-12', invoice_number: 'INV-2025-0690',
                 amount_due: 680000, date_paid: '2025-07-25', amount_paid: 680000,
                 retention_success_by: 'Agent_Siska'
             },
             'CBN000010': {
-                customer_name: 'Lina Marlina', customer_status: 'Freeze', payment_status: 'UNPAID',
+                customer_name: 'Lina Marlina', service_type: 'CBN Fiber 50', customer_status: 'Freeze', payment_status: 'UNPAID',
                 invoice_date: '2025-06-20', invoice_number: 'INV-2025-0635',
                 amount_due: 2250000, date_paid: '2025-07-05', amount_paid: 150000,
                 retention_success_by: 'Agent_Budi'
             },
             'CBN000011': {
-                customer_name: 'Fajar Nugroho', customer_status: 'Active', payment_status: 'PAID',
+                customer_name: 'Fajar Nugroho', service_type: 'CBN Fiber 75', customer_status: 'Active', payment_status: 'PAID',
                 invoice_date: '2025-07-28', invoice_number: 'INV-2025-0740',
                 amount_due: 425000, date_paid: '2025-08-03', amount_paid: 425000,
                 retention_success_by: 'Agent_Dewi'
             },
             'CBN000012': {
-                customer_name: 'Nita Sari', customer_status: 'Active', payment_status: 'UNPAID',
+                customer_name: 'Nita Sari', service_type: 'CBN Fiber 100', customer_status: 'Active', payment_status: 'UNPAID',
                 invoice_date: '2025-07-01', invoice_number: 'INV-2025-0660',
                 amount_due: 550000, date_paid: '2025-07-15', amount_paid: 100000,
                 retention_success_by: 'Agent_Rian'
@@ -776,14 +782,16 @@
                             if (db) {
                                 return {
                                     customer_id: custId, customer_name: db.customer_name,
-                                    customer_status: db.customer_status, payment_status: db.payment_status,
-                                    invoice_date: db.invoice_date, invoice_number: db.invoice_number,
-                                    amount_due: db.amount_due, date_paid: db.date_paid,
-                                    amount_paid: db.amount_paid, retention_success_by: db.retention_success_by
+                                    service_type: db.service_type, customer_status: db.customer_status,
+                                    payment_status: db.payment_status, invoice_date: db.invoice_date,
+                                    invoice_number: db.invoice_number, amount_due: db.amount_due,
+                                    date_paid: db.date_paid, amount_paid: db.amount_paid,
+                                    retention_success_by: db.retention_success_by
                                 };
                             } else {
                                 return {
                                     customer_id: custId, customer_name: row.customer_name || row.Customer_Name || 'Tidak Ditemukan',
+                                    service_type: row.service_type || row['Service Type'] || 'CBN Fiber 50',
                                     customer_status: 'Unknown', payment_status: 'NO DATA',
                                     invoice_date: '-', invoice_number: '-',
                                     amount_due: 0, date_paid: '-', amount_paid: 0,
@@ -864,7 +872,7 @@
             tbody.innerHTML = '';
 
             if (data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="11">
+                tbody.innerHTML = `<tr><td colspan="12">
                     <div class="empty-state">
                         <div class="es-icon"><i class="fas fa-filter-circle-xmark"></i></div>
                         <div class="es-title">Tidak ada data yang cocok</div>
@@ -913,6 +921,9 @@
                 let paidClass = item.amount_paid > 0 ? 'amount-paid' : 'amount-zero';
                 let paidText = item.amount_paid > 0 ? item.amount_paid.toLocaleString('id-ID') : '0';
 
+                // Service Type pill
+                let servicePill = `<span class="service-pill">${item.service_type}</span>`;
+
                 // Retention success by
                 let agentVal = item.retention_success_by === '-' ? '<span class="date-na">-</span>' : `<span class="agent-pill">${item.retention_success_by}</span>`;
 
@@ -920,6 +931,7 @@
                     <td style="text-align:center;color:var(--text-muted);font-size:12px;font-family:'JetBrains Mono',monospace;">${idx + 1}</td>
                     <td><span class="cust-id">${item.customer_id}</span></td>
                     <td><span class="cust-name">${item.customer_name}</span></td>
+                    <td>${servicePill}</td>
                     <td>${csBadge}</td>
                     <td>${psBadge}</td>
                     <td>${invDate}</td>
@@ -947,6 +959,7 @@
             if (query) filtered = filtered.filter(d =>
                 d.customer_id.toLowerCase().includes(query) ||
                 d.customer_name.toLowerCase().includes(query) ||
+                d.service_type.toLowerCase().includes(query) ||
                 d.invoice_number.toLowerCase().includes(query) ||
                 d.retention_success_by.toLowerCase().includes(query)
             );
@@ -963,6 +976,7 @@
                 'No': i + 1,
                 'Customer ID': d.customer_id,
                 'Nama Pelanggan': d.customer_name,
+                'Service Type / Product': d.service_type,
                 'Status Customer': d.customer_status,
                 'Status Payment': d.payment_status,
                 'Invoice Date': d.invoice_date,
@@ -974,7 +988,7 @@
             }));
             exportRows.push({});
             exportRows.push({
-                'No': '', 'Customer ID': '', 'Nama Pelanggan': '',
+                'No': '', 'Customer ID': '', 'Nama Pelanggan': '', 'Service Type / Product': '',
                 'Status Customer': '', 'Status Payment': 'GRAND TOTAL',
                 'Invoice Date': '', 'Invoice Number': '',
                 'Amount Due (Rp)': totalDue,
@@ -985,7 +999,7 @@
 
             const worksheet = XLSX.utils.json_to_sheet(exportRows);
             worksheet['!cols'] = [
-                { wch: 5 }, { wch: 14 }, { wch: 22 }, { wch: 14 },
+                { wch: 5 }, { wch: 14 }, { wch: 22 }, { wch: 22 }, { wch: 14 },
                 { wch: 14 }, { wch: 14 }, { wch: 18 }, { wch: 18 },
                 { wch: 14 }, { wch: 18 }, { wch: 22 }
             ];
